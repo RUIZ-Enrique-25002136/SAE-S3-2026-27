@@ -9,16 +9,16 @@ if($action == "submit"){
     $link = mysqli_connect('localhost', 'admin', 'admin')
     or die('Pb de connexion au serveur: ' . mysqli_connect_error());
     mysqli_select_db($link, 'my_dbname') or die ('Pb de sélection BD : ' . mysqli_error($link));
-    $query = "SELECT user FROM Users WHERE login = $login and pwd = MD5('$mdp') ";
+    $query = "SELECT user FROM Users WHERE login = $login and pwd = MD5('$mdp') ;";
     $result = mysqli_query($link, $query);
     if (!$result)
     {
         echo 'Impossible d\'exécuter la requête ', $query, ' : ', mysqli_error($link);
     }
     else {
-        if (mysqli_num_rows($result) != 0) {
+        if (mysqli_num_rows($result) === 1) {
             while ($row = mysqli_fetch_assoc($result)) {
-                echo $row['username'];
+                echo $row['username']; # Rediriger sur page accueil.
             }
         }
         else{
@@ -26,3 +26,16 @@ if($action == "submit"){
         }
     }
     }
+elseif ($action == "register") {
+    $link = mysqli_connect('localhost', 'admin', 'admin')
+    or die('Pb de connexion au serveur: ' . mysqli_connect_error());
+    mysqli_select_db($link, 'my_dbname') or die ('Pb de sélection BD : ' . mysqli_error($link));
+    $query = "INSERT INTO Users VALUES ($login, $mdp);" ;
+    $result = mysqli_query($link, $query);
+    if (!$result){
+        echo 'Le nom est invalide ou déjà utilisé';
+    }
+    else{
+        echo "Votre identifiant a bien été créé.";
+    }
+}
