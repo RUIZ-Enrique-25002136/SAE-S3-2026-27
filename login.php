@@ -1,7 +1,21 @@
 <?php
-require __DIR__ . '/includes/header.php';
-require __DIR__ . '/includes/footer.php';
+require_once "includes/header.php";
+buildHeader();
+echo <<< HTML
+<h1>Connexion</h1>
+    <form method="post" action="login.php">
+        <p>
+            <label for="email">Email</label><br>
+            <input type="email" id="email" name="email" >
+        </p>
+        <p>
+            <label for="password">Mot de passe</label><br>
+            <input type="password" id="password" name="password" required>
+        </p>
+        <button type="submit">Se connecter</button>
+    </form>
 
+HTML;
 $action = $_POST['action'];
 if ($action === "submit") {
     $mdp = $_POST['password'];
@@ -26,3 +40,5 @@ if ($action === "submit") {
         }
     }
 }
+require_once "includes/footer.php";
+buildFooter();

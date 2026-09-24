@@ -2,8 +2,8 @@
 function buildHeader() : void
 {
 $utilisateur = isset($_SESSION['utilisateur']) ? $_SESSION['utilisateur'] : null;
+?>
 
-echo <<< HTML
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -15,10 +15,11 @@ echo <<< HTML
     <a href="../index.php">Accueil</a>
     <?php if ($utilisateur === null): ?>
         | <a href="../login.php">Connexion</a>
+        <a href="../register.php">Inscription</a>
     <?php else: ?>
-        | <a href="index.php?action=logout">Déconnexion</a>
+        | <a href="../index.php?action=logout">Déconnexion</a>
     <?php endif; ?>
 </nav>
-HTML;
 
-}
+
+<?php }?>
