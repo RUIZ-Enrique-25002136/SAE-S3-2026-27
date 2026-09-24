@@ -1,46 +1,60 @@
 <?php
-require_once "includes/footer.php";
 require_once "includes/header.php";
+require_once "includes/footer.php";
 buildHeader();
-$action = $_POST['action'];
-if ($action === "submit") {
-    $mdp = $_POST['password'];
-    $login = $_POST['login'];
-    if (sizeof($mdp) === 0 || sizeof($login) === 0) {
-        echo "Veuillez remplir tous les champs";
-    }
-    $link = connexion();
-    $query = "SELECT user FROM Users WHERE login = $login and pwd = MD5('$mdp') ;";
-    $result = mysqli_query($link, $query);
-    if (!$result) {
-        echo "nom d'utilisateur ou mot de passe incorrect";
-    } else {
-        if (mysqli_num_rows($result) === 1) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                echo $row['username']; # Rediriger sur page accueil.
-            }
+$erreurs = [];
+$succes = false;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';}
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';}
 
+if ($_POST["action"] === "connexion") {
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        $erreurs[] = "adresse mail non valide";
+    }
+
+    if(empty($erreurs)){
+        $link = connexion();
+        $query = "SELECT name from  Users where name = $email and password = $password;";
+        $result = mysqli_query($link, $query);
+
+        if (sqlite_num_rows($result) === 0) {
+            $erreurs[] = 'Le nom ou le mdp est invalide';
         }
         else{
-            echo "Plusieurs utilisateur au même nom erreur base de données";
+            $succes = true;
+        }
+
+
+    }
+
+}
+if ($succes){
+    echo <<< HTML
+    Connexion réussie.
+    HTML;
+}
+else{
+    if (!empty($erreurs)){
+        foreach ($erreurs as $erreur) {
+            echo "<li>" . htmlspecialchars($erreur) . "</li>";
         }
     }
-}
 
-echo <<< HTML
-<h1>Connexion</h1>
+}?>
     <form method="post" action="login.php">
         <p>
             <label for="email">Email</label><br>
-            <input type="email" id="email" name="email" >
+            <input type="email" id="email" name="email" value="<?= htmlspecialchars($email ?? '') ?>">
         </p>
         <p>
             <label for="password">Mot de passe</label><br>
             <input type="password" id="password" name="password" required>
         </p>
-        <button type="submit">Se connecter</button>
+        <button name="action" type="submit" value = "connexion">Se connecter</button>
     </form>
-
-HTML;
-
-buildFooter();
+<?php buildFooter();
