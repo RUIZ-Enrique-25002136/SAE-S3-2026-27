@@ -1,4 +1,6 @@
 <?php
+function buildHeader() : void
+{
 $utilisateur = isset($_SESSION['utilisateur']) ? $_SESSION['utilisateur'] : null;
 ?>
 
@@ -18,3 +20,6 @@ $utilisateur = isset($_SESSION['utilisateur']) ? $_SESSION['utilisateur'] : null
         | <a href="index.php?action=logout">Déconnexion</a>
     <?php endif; ?>
 </nav>
+<?php
+}
+?>
