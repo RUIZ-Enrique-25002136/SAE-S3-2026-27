@@ -1,21 +1,11 @@
 <?php
-require_once "includes/header.php";
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/includes/footer.php';
+require_once __DIR__ . '/vues/login.php';
 buildHeader();
-echo <<< HTML
-<h1>Connexion</h1>
-    <form method="post" action="login.php">
-        <p>
-            <label for="email">Email</label><br>
-            <input type="email" id="email" name="email" >
-        </p>
-        <p>
-            <label for="password">Mot de passe</label><br>
-            <input type="password" id="password" name="password" required>
-        </p>
-        <button type="submit">Se connecter</button>
-    </form>
+login();
+buildFotter();
 
-HTML;
 $action = $_POST['action'];
 if ($action === "submit") {
     $mdp = $_POST['password'];
@@ -40,5 +30,3 @@ if ($action === "submit") {
         }
     }
 }
-require_once "includes/footer.php";
-buildFooter();

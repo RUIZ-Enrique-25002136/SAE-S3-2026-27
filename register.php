@@ -1,21 +1,12 @@
 <?php
 echo <<< HTML
 
-<h1>S'Inscrire</h1>
-    <form method="post" action="register.php">
-        <p>
-            <label for="email">Email</label><br>
-            <input type="email" id="email" name="email" >
-        </p>
-        <p>
-            <label for="password">Mot de passe</label><br>
-            <input type="password" id="password" name="password" required>
-        </p>
-        <button type="submit">S'inscrire</button>
-    </form>
 
 HTML;
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/includes/footer.php';
 buildHeader();
+
 $action = $_POST['action'];
 if ($action == "register") {
     $mdp = $_POST['password'];

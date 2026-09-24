@@ -1,6 +1,6 @@
 <?php
-require __DIR__ . '/includes/header.php';
-require __DIR__ . '/includes/footer.php';
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/includes/footer.php';
 session_start();
 
 $utilisateur = isset($_SESSION['utilisateur']) ? $_SESSION['utilisateur'] : null;
@@ -25,5 +25,5 @@ buildHeader();
     <p>Vous n'êtes pas connecté. <a href="login.php">Connectez-vous</a> ou <a href="register.php">créez un compte</a>.</p>
 <?php endif; ?>
 
-<?php require __DIR__ . '/includes/footer.php';
+<?php require_once __DIR__ . '/includes/footer.php';
 buildFooter();?>
