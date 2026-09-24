@@ -1,6 +1,8 @@
 <?php
 require __DIR__ . '/includes/header.php';
+require __DIR__ . '/includes/footer.php';
 
+buildHeader();
 
 $mdp = $_POST['password'];
 $login = $_POST['login'];
@@ -25,6 +27,5 @@ if ($action === "submit") {
             echo "Plusieurs utilisateur au même nom erreur base de données";
         }
     }
-    require __DIR__ . '/includes/footer.php';
-
+buildFooter();
 }
