@@ -4,7 +4,7 @@ $login = $_POST['login'];
 $action = $_POST['action'];
 if($action == "submit"){
     if (sizeof($mdp) === 0 || sizeof($login) === 0) {
-        return "Veuillez remplir tous les champs";
+        echo  "Veuillez remplir tous les champs";
     }
     $link = mysqli_connect('localhost', 'admin', 'admin')
     or die('Pb de connexion au serveur: ' . mysqli_connect_error());
