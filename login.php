@@ -2,12 +2,10 @@
 require __DIR__ . '/includes/header.php';
 require __DIR__ . '/includes/footer.php';
 
-buildHeader();
-
-$mdp = $_POST['password'];
-$login = $_POST['login'];
 $action = $_POST['action'];
 if ($action === "submit") {
+    $mdp = $_POST['password'];
+    $login = $_POST['login'];
     if (sizeof($mdp) === 0 || sizeof($login) === 0) {
         echo "Veuillez remplir tous les champs";
     }
@@ -27,5 +25,4 @@ if ($action === "submit") {
             echo "Plusieurs utilisateur au même nom erreur base de données";
         }
     }
-buildFooter();
 }

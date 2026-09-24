@@ -1,9 +1,10 @@
 <?php
 
-$mdp = $_POST['password'];
-$login = $_POST['login'];
+
 $action = $_POST['action'];
 if ($action == "register") {
+    $mdp = $_POST['password'];
+    $login = $_POST['login'];
     if (sizeof($mdp) < 8) {
         echo "mot de passe trop court";
     }
