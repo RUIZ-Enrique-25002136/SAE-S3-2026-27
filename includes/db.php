@@ -31,7 +31,9 @@ function connexion(): PDO
         try {
             $pdo = new PDO($dsn, $config['DB_USER'], $config['DB_PASS'], $options);
         } catch (PDOException $e) {
-            die('Connexion échouée : ' . $e->getMessage());
+            error_log('Connexion BDD échouée : ' . $e->getMessage());
+            http_response_code(500);
+            die('Service momentanément indisponible.');
         }
     }
 
