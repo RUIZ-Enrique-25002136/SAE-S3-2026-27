@@ -1,11 +1,8 @@
-<?php
-function buildFooter() : void
+<?php function buildFooter() : void
 {
-
-        echo <<< HTML
+echo <<< HTML
+    
     </body>
-    <textarea> bonjour</textarea>
     </html>
     HTML;
-
 }
