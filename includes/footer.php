@@ -1,4 +1,5 @@
-<?php function buildFooter():void{
+<?php function buildFooter() : void
+{
 echo <<< HTML
     
     </body>

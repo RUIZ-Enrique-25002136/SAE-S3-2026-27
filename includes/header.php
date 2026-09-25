@@ -15,7 +15,7 @@ $utilisateur = isset($_SESSION['utilisateur']) ? $_SESSION['utilisateur'] : null
     <a href="../index.php">Accueil</a>
     <?php if ($utilisateur === null): ?>
         | <a href="../login.php">Connexion</a>
-        <a href="../register.php">Inscription</a>
+        | <a href="../register.php">Inscription</a>
     <?php else: ?>
         | <a href="../index.php?action=logout">Déconnexion</a>
     <?php endif; ?>
