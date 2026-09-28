@@ -1,4 +1,8 @@
 <?php
+require_once("includes/header.php");
+require_once("includes/footer.php");
+
+buildHeader();
 echo <<< HTML
 
 <h1>S'Inscrire</h1>
@@ -15,7 +19,6 @@ echo <<< HTML
     </form>
 
 HTML;
-buildHeader();
 $action = $_POST['action'];
 if ($action == "register") {
     $mdp = $_POST['password'];
