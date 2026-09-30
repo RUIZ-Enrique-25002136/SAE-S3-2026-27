@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once "includes/header.php";
 require_once "includes/footer.php";
 require_once "includes/db.php";
@@ -9,22 +10,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    if ($_POST["action"] === "connexion") {
+    if ($_POST["action"]??'' === "connexion") {
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
         $erreurs[] = "adresse mail non valide";
     }
 
     if(empty($erreurs)){
-        $link = connexion();
-        $query = "SELECT name from  Users where name = $email and password = $password;";
-        $result = mysqli_query($link, $query);
-
-        if (mysqli_num_rows($result) === 0) {
-            $erreurs[] = 'Le nom ou le mdp est invalide';
+        try{
+            $dsn = "mysql:host=localhost;dbname=users";
+            $pdo = new \PDO($dsn, 'root','root');
+            $pdo-> exec("SET CHARACTER SET utf8");
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
-        else{
+        catch(PDOException $e){
+            die('Erreur : '.$e->getMessage());
+        }
+        $sql = "SELECT *  FROM `users` WHERE  email = :email and password = :password";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(":email", $email,PDO::PARAM_STR);
+        $stmt->bindValue(":password", $password,PDO::PARAM_STR);
+        try{
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_OBJ);
+            $result = $stmt->fetch();
+        }
+        catch(PDOException $e){
+            echo 'Erreur : '.$e->getMessage() . PHP_EOL;
+            echo 'Requête : '. $sql . PHP_EOL;
+            exit();
+        }
+        if($result){
             $succes = true;
+        }
+
+        else {
+            $erreurs[] = 'Le nom ou le mdp est invalide';
         }
 
 
@@ -32,6 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 }}
 if ($succes){
+    $_SESSION['email'] = $result->email;
     echo <<< HTML
     Connexion réussie.
     HTML;
