@@ -1,44 +1,64 @@
 <?php
-require_once "includes/header.php";
-buildHeader();
-echo <<< HTML
-<h1>Connexion</h1>
-    <form method="post" action="login.php">
-        <p>
-            <label for="email">Email</label><br>
-            <input type="email" id="email" name="email" >
-        </p>
-        <p>
-            <label for="password">Mot de passe</label><br>
-            <input type="password" id="password" name="password" required>
-        </p>
-        <button type="submit">Se connecter</button>
-    </form>
+require_once __DIR__ . '/includes/header.php';
+require_once __DIR__ . '/includes/footer.php';
+require_once __DIR__ . '/includes/db.php';
 
-HTML;
-$action = $_POST['action'];
-if ($action === "submit") {
-    $mdp = $_POST['password'];
-    $login = $_POST['login'];
-    if (sizeof($mdp) === 0 || sizeof($login) === 0) {
-        echo "Veuillez remplir tous les champs";
-    }
-    $link = connexion();
-    $query = "SELECT user FROM Users WHERE login = $login and pwd = MD5('$mdp') ;";
-    $result = mysqli_query($link, $query);
-    if (!$result) {
-        echo "nom d'utilisateur ou mot de passe incorrect";
+buildHeader('Connexion');
+
+$message = null;
+$messageType = 'danger';
+
+$action = $_POST['action'] ?? null;
+if ($action === "submit" || ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
+    $mdp = $_POST['password'] ?? '';
+    $login = $_POST['login'] ?? $_POST['email'] ?? '';
+
+    if (empty($mdp) || empty($login)) {
+        $message = "Veuillez remplir tous les champs.";
     } else {
-        if (mysqli_num_rows($result) === 1) {
-            while ($row = mysqli_fetch_assoc($result)) {
-                echo $row['username']; # Rediriger sur page accueil.
-            }
+        try {
+            $link = connexion();
+            // Requête préparée PDO sécurisée
+            $stmt = $link->prepare("SELECT * FROM users WHERE login = :login LIMIT 1");
+            $stmt->execute(['login' => $login]);
+            $user = $stmt->fetch();
 
-        }
-        else{
-            echo "Plusieurs utilisateur au même nom erreur base de données";
+            if ($user && (password_verify($mdp, $user['password']) || $user['password'] === md5($mdp))) {
+                $_SESSION['utilisateur'] = $user;
+                $messageType = 'success';
+                $message = "Connexion réussie ! Redirection en cours...";
+                header('Refresh: 1; URL=index.php');
+            } else {
+                $message = "Nom d'utilisateur ou mot de passe incorrect.";
+            }
+        } catch (Throwable $e) {
+            // Fallback en cas de configuration différente
+            $message = "Erreur de connexion à la base de données.";
         }
     }
 }
-require_once "includes/footer.php";
+?>
+
+<h1>Connexion</h1>
+
+<?php if ($message !== null): ?>
+    <div class="alert alert-<?= $messageType ?>"><?= htmlspecialchars($message) ?></div>
+<?php endif; ?>
+
+<form method="post" action="login.php">
+    <p>
+        <label for="email">Email / Identifiant</label>
+        <input type="text" id="email" name="login" required placeholder="nom@exemple.fr" value="<?= htmlspecialchars($_POST['login'] ?? $_POST['email'] ?? '') ?>">
+    </p>
+    <p>
+        <label for="password">Mot de passe</label>
+        <input type="password" id="password" name="password" required placeholder="••••••••">
+    </p>
+    <button type="submit" name="action" value="submit">Se connecter</button>
+</form>
+
+<p class="auth-helper">Pas encore de compte ? <a href="register.php">Créer un compte</a></p>
+
+<?php
 buildFooter();
+?>
