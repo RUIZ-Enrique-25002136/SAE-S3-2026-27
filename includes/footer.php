@@ -1,11 +1,15 @@
 <?php
 function buildFooter() : void
 {
-
-        echo <<< HTML
-    </body>
-    <textarea> bonjour</textarea>
-    </html>
-    HTML;
-
+?>
+</main>
+<footer class="site-footer">
+    <div class="footer-container">
+        <p>&copy; <?= date('Y') ?> &bull; SAE S3 &bull; BUT Informatique</p>
+    </div>
+</footer>
+</body>
+</html>
+<?php
 }
+?>
