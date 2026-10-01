@@ -10,30 +10,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
     $confirmation = $_POST['confirmation'] ?? '';
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    $erreurs[] = "Email invalide.";
+    }
+    if (strlen($password) < 8) {
+    $erreurs[] = "Le mot de passe doit contenir au moins 8 caractères.";
+    }
+    if ($password !== $confirmation) {
+    $erreurs[] = "Les mots de passe ne correspondent pas.";
+    }
 
-    if ($_POST["action"] === "inscription") {
-
-        if (strlen($password) < 8) {
-        $erreurs[] =  "mot de passe trop court";
+     if(empty($erreurs)){
+        try{
+            $dsn = "mysql:host=localhost;dbname=users";
+            $pdo = new \PDO($dsn, 'root','root');
+            $pdo-> exec("SET CHARACTER SET utf8");
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
-
-        if( strcmp($confirmation ,$password) !== 0 ){
-            $erreurs[] = "Les mots de passe ne correspondent pas";}
-
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
-            $erreurs[] = "adresse mail non valide";
+        catch(PDOException $e){
+            die('Erreur : '.$e->getMessage());
         }
-
-    if(empty($erreurs)){
-        $link = connexion();
-        $query = "INSERT INTO Users VALUES ($email, $password);";
-        $result = mysqli_query($link, $query);
-        if (!$result) {
-            $erreurs[] = 'Le nom est invalide ou déjà utilisé';
-        }
-        else{
+        $sql = "INSERT INTO users(email,password) VALUES (:email,:password)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(":email", $email,PDO::PARAM_STR);
+        $stmt->bindValue(":password", $password,PDO::PARAM_STR);
+        try{
+            $stmt->execute();
             $succes = true;
         }
+        catch(PDOException $e){
+            if ($e->getCode() === '23000') { 
+                $erreurs[] = "Cet email est déjà utilisé.";
+                }
+            else {
+                $erreurs[] = "Une erreur est survenue.";
+    }
 
 
     }

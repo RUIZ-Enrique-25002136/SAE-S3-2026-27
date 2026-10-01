@@ -57,6 +57,7 @@ if ($succes){
     echo <<< HTML
     Connexion réussie.
     HTML;
+    head("login.php");
 }
 else{
     if (!empty($erreurs)){
