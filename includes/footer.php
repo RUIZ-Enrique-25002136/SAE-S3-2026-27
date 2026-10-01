@@ -1,7 +1,6 @@
-<?php
-function buildFooter() : void
+<?php function buildFooter() : void
 {
-?>
+Z?>
 </main>
 <footer class="site-footer">
     <div class="footer-container">

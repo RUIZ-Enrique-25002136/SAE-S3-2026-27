@@ -1,6 +1,7 @@
 <?php
-require_once __DIR__ . '/includes/header.php';
-require_once __DIR__ . '/includes/footer.php';
+require_once  'includes/header.php';
+require_once 'includes/footer.php';
+session_start();
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -36,6 +37,11 @@ buildHeader($titre);
     <?php endif; ?>
 </div>
 
+<?php if ($utilisateur !== null): ?>
+    <p>Bonjour <strong><?= htmlspecialchars($utilisateur['email']) ?></strong>, vous êtes connecté.</p>
+<?php else: ?>
+    <p>Vous n'êtes pas connecté. <a href="login.php">Connectez-vous</a> ou <a href="register.php">créez un compte</a>.</p>
+<?php endif; ?>
+
 <?php
-buildFooter();
-?>
+buildFooter();?>

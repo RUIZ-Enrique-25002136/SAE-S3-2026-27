@@ -1,64 +1,82 @@
 <?php
-require_once __DIR__ . '/includes/header.php';
-require_once __DIR__ . '/includes/footer.php';
-require_once __DIR__ . '/includes/db.php';
+session_start();
+require_once "includes/header.php";
+require_once "includes/footer.php";
+require_once "includes/db.php";
+buildHeader();
+$erreurs = [];
+$succes = false;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = trim($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
 
-buildHeader('Connexion');
+    if ($_POST["action"]??'' === "connexion") {
 
-$message = null;
-$messageType = 'danger';
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        $erreurs[] = "adresse mail non valide";
+    }
 
-$action = $_POST['action'] ?? null;
-if ($action === "submit" || ($_SERVER['REQUEST_METHOD'] ?? '') === 'POST') {
-    $mdp = $_POST['password'] ?? '';
-    $login = $_POST['login'] ?? $_POST['email'] ?? '';
+    if(empty($erreurs)){
+        try{
+            $dsn = "mysql:host=localhost;dbname=users";
+            $pdo = new \PDO($dsn, 'root','root');
+            $pdo-> exec("SET CHARACTER SET utf8");
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        }
+        catch(PDOException $e){
+            die('Erreur : '.$e->getMessage());
+        }
+        $sql = "SELECT *  FROM `users` WHERE  email = :email and password = :password";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(":email", $email,PDO::PARAM_STR);
+        $stmt->bindValue(":password", $password,PDO::PARAM_STR);
+        try{
+            $stmt->execute();
+            $stmt->setFetchMode(PDO::FETCH_OBJ);
+            $result = $stmt->fetch();
+        }
+        catch(PDOException $e){
+            echo 'Erreur : '.$e->getMessage() . PHP_EOL;
+            echo 'Requête : '. $sql . PHP_EOL;
+            exit();
+        }
+        if($result){
+            $succes = true;
+        }
 
-    if (empty($mdp) || empty($login)) {
-        $message = "Veuillez remplir tous les champs.";
-    } else {
-        try {
-            $link = connexion();
-            // Requête préparée PDO sécurisée
-            $stmt = $link->prepare("SELECT * FROM users WHERE login = :login LIMIT 1");
-            $stmt->execute(['login' => $login]);
-            $user = $stmt->fetch();
+        else {
+            $erreurs[] = 'Le nom ou le mdp est invalide';
+        }
 
-            if ($user && (password_verify($mdp, $user['password']) || $user['password'] === md5($mdp))) {
-                $_SESSION['utilisateur'] = $user;
-                $messageType = 'success';
-                $message = "Connexion réussie ! Redirection en cours...";
-                header('Refresh: 1; URL=index.php');
-            } else {
-                $message = "Nom d'utilisateur ou mot de passe incorrect.";
-            }
-        } catch (Throwable $e) {
-            // Fallback en cas de configuration différente
-            $message = "Erreur de connexion à la base de données.";
+
+    }
+
+}}
+if ($succes){
+    $_SESSION['email'] = $result->email;
+    echo <<< HTML
+    Connexion réussie.
+    HTML;
+    head("login.php");
+}
+else{
+    if (!empty($erreurs)){
+        foreach ($erreurs as $erreur) {
+            echo "<ul><li>" . htmlspecialchars($erreur) . "</li></ul>";
         }
     }
-}
-?>
 
+}?>
 <h1>Connexion</h1>
-
-<?php if ($message !== null): ?>
-    <div class="alert alert-<?= $messageType ?>"><?= htmlspecialchars($message) ?></div>
-<?php endif; ?>
-
-<form method="post" action="login.php">
-    <p>
-        <label for="email">Email / Identifiant</label>
-        <input type="text" id="email" name="login" required placeholder="nom@exemple.fr" value="<?= htmlspecialchars($_POST['login'] ?? $_POST['email'] ?? '') ?>">
-    </p>
-    <p>
-        <label for="password">Mot de passe</label>
-        <input type="password" id="password" name="password" required placeholder="••••••••">
-    </p>
-    <button type="submit" name="action" value="submit">Se connecter</button>
-</form>
-
-<p class="auth-helper">Pas encore de compte ? <a href="register.php">Créer un compte</a></p>
-
-<?php
-buildFooter();
-?>
+    <form method="post" action="login.php">
+        <p>
+            <label for="email">Email</label><br>
+            <input type="email" id="email" name="email" value="<?= htmlspecialchars($email ?? '') ?>" required>
+        </p>
+        <p>
+            <label for="password">Mot de passe</label><br>
+            <input type="password" id="password" name="password" required>
+        </p>
+        <button name="action" type="submit" value = "connexion">Se connecter</button>
+    </form>
+<?php buildFooter();?>
