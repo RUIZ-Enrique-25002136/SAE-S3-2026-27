@@ -1,7 +1,7 @@
 <?php
 require_once "includes/header.php";
 require_once "includes/footer.php";
-require_once "includes/db.php";
+require_once "includes/connnexion_db.php";
 buildHeader();
 $erreurs = [];
 $succes = false;

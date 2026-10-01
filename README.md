@@ -25,7 +25,7 @@ DB_PASS=votre_mot_de_passe_local
 ---
 
 ### 3. Utiliser la connexion dans le code PHP
-Pour exécuter vos requêtes SQL, incluez `includes/db.php` et appelez `connexion()`. Cette fonction lit le `.env` et renvoie une instance `PDO` :
+Pour exécuter vos requêtes SQL, incluez `includes/connnexion_db.php` et appelez `connexion()`. Cette fonction lit le `.env` et renvoie une instance `PDO` :
 
 ```php
 require_once __DIR__ . '/includes/db.php';
