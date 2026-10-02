@@ -1,9 +1,10 @@
 -- Création de la table utilisateurs
 CREATE TABLE IF NOT EXISTS users (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-    login VARCHAR(50) NOT NULL,
+    login VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    verified BOOL DEFAULT FALSE,
     -- Contraintes et index pour le barème
     UNIQUE KEY uk_user_login (login),
     INDEX idx_user_created (created_at)
