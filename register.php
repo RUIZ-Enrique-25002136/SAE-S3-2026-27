@@ -29,10 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         catch(PDOException $e){
             die('Erreur : '.$e->getMessage());
         }
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
         $sql = "INSERT INTO users(email,password) VALUES (:email,:password)";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(":email", $email,PDO::PARAM_STR);
-        $stmt->bindValue(":password", $password,PDO::PARAM_STR);
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->bindValue(':password', $passwordHash, PDO::PARAM_STR);
         try{
             $stmt->execute();
             $succes = true;

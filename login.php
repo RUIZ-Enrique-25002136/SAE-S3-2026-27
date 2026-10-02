@@ -3,6 +3,9 @@ session_start();
 require_once "includes/header.php";
 require_once "includes/footer.php";
 require_once "includes/connnexion_db.php";
+require_once "models/User.php";
+require_once "models/UserRepository.php";
+
 buildHeader();
 $erreurs = [];
 $succes = false;
@@ -19,44 +22,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if(empty($erreurs)){
         try{
             $pdo = connexion();
-            $pdo-> exec("SET CHARACTER SET utf8");
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        }
-        catch(PDOException $e){
-            die('Erreur : '.$e->getMessage());
-        }
-        $sql = "SELECT *  FROM `users` WHERE  email = :email and password = :password";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(":email", $email,PDO::PARAM_STR);
-        $stmt->bindValue(":password", $password,PDO::PARAM_STR);
-        try{
-            $stmt->execute();
-            $stmt->setFetchMode(PDO::FETCH_OBJ);
-            $result = $stmt->fetch();
-        }
-        catch(PDOException $e){
-            echo 'Erreur : '.$e->getMessage() . PHP_EOL;
-            echo 'Requête : '. $sql . PHP_EOL;
-            exit();
-        }
-        if($result){
-            $succes = true;
-        }
+            $userRepository = new UserRepository($pdo);
+            $user = $userRepository -> findByEmail($email);
 
-        else {
-            $erreurs[] = 'Le nom ou le mdp est invalide';
+            if ($user != null && $user->verifierMotDePasse($password)){
+                $succes = true;
+                $_SESSION['email'] = $email;
+                $_SESSION['utilisateur'] = [
+                        'id' => $user->id,
+                    'email' => $user->email,
+                ];
+            } else {
+                $erreurs[] = 'email ou mot de passe incorrect';
+            }
+        } catch (PDOException $e) {
+            $erreurs[] = 'Une erreur de la base de donnée est survenue'; ;
         }
-
 
     }
 
 }}
 if ($succes){
-    $_SESSION['email'] = $result->email;
-    $_SESSION['utilisateur'] = [
-        'id' => $result->id,
-        'email' => $result->email,
-    ];
     echo <<< HTML
     <div class="success-message">Connexion réussie. Redirection...</div>
     <meta http-equiv="refresh" content="1;url=index.php">

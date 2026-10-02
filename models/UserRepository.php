@@ -5,11 +5,12 @@ final class UserRepository
 
     public function findByEmail(string $email): ?User  {
         $query = $this->pdo->prepare('SELECT * FROM `users` WHERE `email` = :email LIMIT 1');
-        if (!$query->execute(['email' => $email])) {
+        $query->execute(['email' => $email]);
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+        if (!$row){
             return null;
         }
-        $row = $query->fetch(PDO::FETCH_ASSOC);
-        return new User($row[0], $row[1], $row[2]);
+        return $this->hydrater($row);
     }  // null si absent
     public function emailExists(string $email): bool {
         $res = $this->pdo->prepare('SELECT * FROM `users` WHERE `email` = :email');
