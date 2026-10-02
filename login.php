@@ -18,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
         $erreurs[] = "adresse mail non valide";
     }
-
     if(empty($erreurs)){
         try{
             $pdo = connexion();

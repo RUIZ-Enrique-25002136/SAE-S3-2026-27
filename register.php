@@ -28,9 +28,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             die('Erreur : ' . $e->getMessage());
         }
-        catch(PDOException $e){
-            die('Erreur : '.$e->getMessage());
-        }
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
         $token = bin2hex(random_bytes(32));
         $sql = "INSERT INTO users(email,password, verify_token) VALUES (:email,:password, :token)";

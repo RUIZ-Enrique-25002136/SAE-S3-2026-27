@@ -1,9 +1,10 @@
 <?php
-$token = $_GET['token'];
+$token = $_GET['token'] ?? '';
++require_once __DIR__ . '/includes/connnexion_db.php';
 
 $pdo = connection();
-$stmt = $pdo->prepare("UPDATE users SET verfied = TRUE, verify_token = NULL WHERE verify_token = ?");
-$stmt->execute([$token, $email]);
+$stmt = $pdo->prepare("UPDATE users SET verified = TRUE, verify_token = NULL WHERE verify_token = ?");
+$stmt->execute([$token]);
 
 if ($stmt->rowCount() > 0){
     echo <<< HTML

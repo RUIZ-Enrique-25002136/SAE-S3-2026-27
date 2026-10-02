@@ -20,9 +20,10 @@ final class UserRepository
         return true;
     }
     public  function create(string $email, string $motDePasseClair): User {
-        $id = $this->pdo->lastInsertId();
         $passwordHash = password_hash($motDePasseClair, PASSWORD_DEFAULT);
-        return new User($id, $email, $passwordHash);
+        $query = $this->pdo->prepare('INSERT INTO `users` (`email`, `password`) VALUES (:email, :password)');
+        $query->execute(['email' => $email, 'password' => $passwordHash]);
+        return new User((int) $this->pdo->lastInsertId(), $email, $passwordHash);
     }
 
     private function hydrater(array $ligne): User {
