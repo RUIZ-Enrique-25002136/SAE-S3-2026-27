@@ -1,5 +1,7 @@
 <?php
-namespace App\Model;
+namespace App\models;
+use PDO;
+use App\models\User;
 final class UserRepository
 {
     public function __construct(private readonly PDO $pdo) {}

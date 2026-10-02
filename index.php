@@ -1,5 +1,4 @@
 <?php
-require_once  'autoload.php';
 require_once "includes/footer.php";
 require_once "includes/header.php";
 
