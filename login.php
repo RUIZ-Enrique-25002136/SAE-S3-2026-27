@@ -56,7 +56,8 @@ if ($succes){
     echo <<< HTML
     Connexion réussie.
     HTML;
-    head("login.php");
+    header("location : /index.php");
+    exit();
 }
 else{
     if (!empty($erreurs)){
@@ -64,7 +65,7 @@ else{
             echo "<ul><li>" . htmlspecialchars($erreur) . "</li></ul>";
         }
     }
-
+    exit();
 }?>
 <h1>Connexion</h1>
     <form method="post" action="login.php">

@@ -1,5 +1,5 @@
 <?php
-
+$_SESSION['identfiant'] = '';
 function parse_env () : void
 {
     putenv(parse_ini_file('../.env'));

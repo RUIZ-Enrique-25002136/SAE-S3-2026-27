@@ -3,8 +3,6 @@
 function connexion(): PDO
 {
     static $pdo = null;
-
-    if ($pdo === null) {
         $envFile = __DIR__ . '/.env';
         if (!file_exists($envFile)) {
             $envFile = __DIR__ . '/../.env';
@@ -33,7 +31,7 @@ function connexion(): PDO
         } catch (PDOException $e) {
             die('Connexion échouée : ' . $e->getMessage());
         }
-    }
+
 
     return $pdo;
 }

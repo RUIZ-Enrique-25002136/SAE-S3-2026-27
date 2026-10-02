@@ -14,6 +14,7 @@ function buildHeader(string $titre = 'Accueil') : void
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($titre) ?> - SAE S3</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" type="image/x-icon" href="/assets/logo.png">
 </head>
 <body>
 <header class="site-header">
