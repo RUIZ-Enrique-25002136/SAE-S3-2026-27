@@ -237,6 +237,59 @@ main {
   flex-wrap: wrap;
 }
 
+/* Mentions légales */
+.mentions-card {
+  max-width: 820px;
+  margin: 1.5rem auto;
+  line-height: 1.7;
+}
+
+.mentions-card h1 {
+  margin-bottom: 2rem;
+}
+
+.mentions-section {
+  margin-bottom: 2rem;
+}
+
+.mentions-section:last-of-type {
+  margin-bottom: 1.5rem;
+}
+
+.mentions-section h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.mentions-section p {
+  color: var(--text-body);
+  margin-bottom: 0.75rem;
+}
+
+.mentions-section ul {
+  margin: 0.5rem 0 1rem 1.5rem;
+  color: var(--text-body);
+  list-style-type: disc;
+}
+
+.mentions-section li {
+  margin-bottom: 0.4rem;
+}
+
+.mentions-section code {
+  background-color: var(--primary-light);
+  color: var(--primary);
+  padding: 0.15rem 0.4rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.9em;
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+
 /* Formulaires */
 form {
   background-color: var(--bg-surface);

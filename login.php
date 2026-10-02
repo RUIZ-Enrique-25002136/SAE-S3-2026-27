@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
 
-    if ($_POST["action"]??'' === "connexion") {
+    if (($_POST["action"] ?? '') === "connexion") {
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
         $erreurs[] = "adresse mail non valide";
@@ -53,10 +53,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }}
 if ($succes){
     $_SESSION['email'] = $result->email;
+    $_SESSION['utilisateur'] = [
+        'id' => $result->id,
+        'email' => $result->email,
+    ];
     echo <<< HTML
-    Connexion réussie.
+    <div class="success-message">Connexion réussie. Redirection...</div>
+    <meta http-equiv="refresh" content="1;url=index.php">
+    <p><a href="index.php">Cliquez ici si vous n'êtes pas redirigé.</a></p>
     HTML;
-    head("login.php");
 }
 else{
     if (!empty($erreurs)){
