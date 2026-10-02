@@ -3,7 +3,7 @@ $token = $_GET['token'];
 
 $pdo = connection();
 $stmt = $pdo->prepare("UPDATE users SET verfied = TRUE, verify_token = NULL WHERE verify_token = ?");
-$stmt->execute([$token, $email]);
+$stmt->execute([$token]);
 
 if ($stmt->rowCount() > 0){
     echo <<< HTML
