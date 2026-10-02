@@ -1,8 +1,8 @@
 <?php
 $token = $_GET['token'] ?? '';
-+require_once __DIR__ . '/includes/connnexion_db.php';
+require_once __DIR__ . '/includes/connnexion_db.php';
 
-$pdo = connection();
+$pdo = connexion();
 $stmt = $pdo->prepare("UPDATE users SET verified = TRUE, verify_token = NULL WHERE verify_token = ?");
 $stmt->execute([$token]);
 
