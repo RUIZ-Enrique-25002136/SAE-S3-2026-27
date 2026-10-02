@@ -3,8 +3,6 @@
 function connexion(): PDO
 {
     static $pdo = null;
-
-    if ($pdo === null) {
         $envFile = __DIR__ . '/.env';
         if (!file_exists($envFile)) {
             $envFile = __DIR__ . '/../.env';
@@ -49,7 +47,7 @@ function connexion(): PDO
             http_response_code(500);
             die('Service momentanément indisponible.');
         }
-    }
+
 
     return $pdo;
 }

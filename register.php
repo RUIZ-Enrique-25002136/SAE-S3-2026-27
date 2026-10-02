@@ -11,49 +11,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ?? '';
     $confirmation = $_POST['confirmation'] ?? '';
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    $erreurs[] = "Email invalide.";
+        $erreurs[] = "Email invalide.";
     }
     if (strlen($password) < 8) {
-    $erreurs[] = "Le mot de passe doit contenir au moins 8 caractères.";
+        $erreurs[] = "Le mot de passe doit contenir au moins 8 caractères.";
     }
     if ($password !== $confirmation) {
-    $erreurs[] = "Les mots de passe ne correspondent pas.";
+        $erreurs[] = "Les mots de passe ne correspondent pas.";
     }
 
-     if(empty($erreurs)){
-        try{
+    if (empty($erreurs)) {
+        try {
             $pdo = connexion();
-            $pdo-> exec("SET CHARACTER SET utf8");
+            $pdo->exec("SET CHARACTER SET utf8");
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            die('Erreur : ' . $e->getMessage());
         }
         catch(PDOException $e){
             die('Erreur : '.$e->getMessage());
         }
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
-        $sql = "INSERT INTO users(email,password) VALUES (:email,:password)";
+        $token = bin2hex(random_bytes(32));
+        $sql = "INSERT INTO users(email,password, verify_token) VALUES (:email,:password, :token)";
         $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':email', $email, PDO::PARAM_STR);
         $stmt->bindValue(':password', $passwordHash, PDO::PARAM_STR);
+        $stmt->bindValue(":token", $token, PDO::PARAM_STR);
         try{
             $stmt->execute();
             $succes = true;
-        }
-        catch(PDOException $e){
-            if ($e->getCode() === '23000') { 
+        } catch (PDOException $e) {
+            if ($e->getCode() === '23000') {
                 $erreurs[] = "Cet email est déjà utilisé.";
-                }
-            else {
+            } else {
                 $erreurs[] = "Une erreur est survenue.";
+            }
+        }
+        $link = 'http://localhost/verify.php?token=' . $token;
+        mail($email, 'Confirme ton email', 'Clique ici : ' . $link);
+
     }
-
-
-    }
-
-}}
+}
 if ($succes){
     echo <<< HTML
     Inscription réussie.
-    <p><a href="login.php">Vous connecter ?</a></p>
+    Veullier verifier votre email.
     HTML;
 }
 else{
