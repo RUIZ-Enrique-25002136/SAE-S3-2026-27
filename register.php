@@ -28,13 +28,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } catch (PDOException $e) {
             die('Erreur : ' . $e->getMessage());
         }
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
         $token = bin2hex(random_bytes(32));
-        $sql = "INSERT INTO users(email,password, verify_token) VALUES (:email,:password,:token)";
+        $sql = "INSERT INTO users(email,password, verify_token) VALUES (:email,:password, :token)";
         $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(":email", $email, PDO::PARAM_STR);
-        $stmt->bindValue(":password", $password, PDO::PARAM_STR);
+        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
+        $stmt->bindValue(':password', $passwordHash, PDO::PARAM_STR);
         $stmt->bindValue(":token", $token, PDO::PARAM_STR);
-        try {
+        try{
             $stmt->execute();
             $succes = true;
         } catch (PDOException $e) {

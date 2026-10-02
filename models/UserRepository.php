@@ -5,23 +5,23 @@ final class UserRepository
 
     public function findByEmail(string $email): ?User  {
         $query = $this->pdo->prepare('SELECT * FROM `users` WHERE `email` = :email LIMIT 1');
-        if (!$query->execute(['email' => $email])) {
+        $query->execute(['email' => $email]);
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+        if (!$row){
             return null;
         }
-        $row = $query->fetch(PDO::FETCH_ASSOC);
-        return new User($row[0], $row[1], $row[2]);
+        return $this->hydrater($row);
     }  // null si absent
     public function emailExists(string $email): bool {
-        $res = $this->pdo->prepare('SELECT * FROM `users` WHERE `email` = :email');
-        if (!$res) {
-            return false;
-        }
-        return true;
+        $query = $this->pdo->prepare('SELECT 1 FROM `users` WHERE `email` = :email LIMIT 1');
+        $query->execute(['email' => $email]);
+        return $query->fetchColumn() !== false;
     }
     public  function create(string $email, string $motDePasseClair): User {
-        $id = $this->pdo->lastInsertId();
         $passwordHash = password_hash($motDePasseClair, PASSWORD_DEFAULT);
-        return new User($id, $email, $passwordHash);
+        $query = $this->pdo->prepare('INSERT INTO `users` (`email`, `password`) VALUES (:email, :password)');
+        $query->execute(['email' => $email, 'password' => $passwordHash]);
+        return new User((int) $this->pdo->lastInsertId(), $email, $passwordHash);
     }
 
     private function hydrater(array $ligne): User {
