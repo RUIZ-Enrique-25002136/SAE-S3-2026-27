@@ -22,8 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
      if(empty($erreurs)){
         try{
-            $dsn = "mysql:host=localhost;dbname=users";
-            $pdo = new \PDO($dsn, 'root','root');
+            $pdo = connexion();
             $pdo-> exec("SET CHARACTER SET utf8");
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         }
