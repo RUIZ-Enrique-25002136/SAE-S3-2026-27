@@ -216,4 +216,7 @@ $RECYCLE.BIN/
 # Env
 .env
 
+# Sujet du projet
+s24-projet.pdf
+
 # End of https://www.toptal.com/developers/gitignore/api/linux,windows,intellij+all,phpstorm

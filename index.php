@@ -7,11 +7,12 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$utilisateur = $_SESSION['utilisateur'] ?? null;
+$utilisateur = $_SESSION['utilisateur'] ?? '';
 
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     session_destroy();
     header('Location: index.php');
+    $utilisateur = '';
     exit;
 }
 
@@ -22,7 +23,7 @@ buildHeader($titre);
 <div class="card welcome-card">
     <h1>Bienvenue</h1>
 
-    <?php if ($utilisateur !== null): ?>
+    <?php if ($utilisateur !== ''): ?>
         <p class="welcome-text">Bonjour <strong><?= htmlspecialchars($utilisateur['email'] ?? $utilisateur['login'] ?? '') ?></strong>, vous êtes connecté.</p>
         <div class="card-actions">
             <a href="index.php?action=logout" class="btn btn-secondary">Déconnexion</a>
@@ -37,11 +38,8 @@ buildHeader($titre);
     <?php endif; ?>
 </div>
 
-<?php if ($utilisateur !== null): ?>
-    <p>Bonjour <strong><?= htmlspecialchars($utilisateur['email']) ?></strong>, vous êtes connecté.</p>
-<?php else: ?>
+<?php if($utilisateur == '') ?>
     <p>Vous n'êtes pas connecté. <a href="login.php">Connectez-vous</a> ou <a href="register.php">créez un compte</a>.</p>
-<?php endif; ?>
 
 <?php
 buildFooter();?>
