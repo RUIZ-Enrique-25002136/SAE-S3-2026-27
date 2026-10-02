@@ -17,9 +17,9 @@ DB_PASS=votre_mot_de_passe_local
 
 ### 2. Initialiser votre base de données locale
 1. Démarrez votre serveur MySQL / MariaDB local.
-2. Créez une base vide (ex. `sae_s3`).
-3. Importez le fichier `sql/schema.sql` dans cette base :
-   - En ligne de commande : `mysql -u root -p sae_s3 < sql/schema.sql`
+2. Initialisez la base de données :
+   - **Automatiquement via le script PHP fourni** : `php sql/init_db.php` (crée la base `sae_s3`, importe le schéma et vérifie tout).
+   - Ou manuellement en ligne de commande : `mysql -u root -p sae_s3 < sql/schema.sql`
    - Ou via phpMyAdmin local : onglet **Importer** > choisir `sql/schema.sql`.
 
 ---
