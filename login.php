@@ -55,7 +55,6 @@ else{
             echo "<ul><li>" . htmlspecialchars($erreur) . "</li></ul>";
         }
     }
-    exit();
 }?>
 <h1>Connexion</h1>
     <form method="post" action="login.php">
