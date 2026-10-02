@@ -13,11 +13,9 @@ final class UserRepository
         return $this->hydrater($row);
     }  // null si absent
     public function emailExists(string $email): bool {
-        $res = $this->pdo->prepare('SELECT * FROM `users` WHERE `email` = :email');
-        if (!$res) {
-            return false;
-        }
-        return true;
+        $query = $this->pdo->prepare('SELECT 1 FROM `users` WHERE `email` = :email LIMIT 1');
+        $query->execute(['email' => $email]);
+        return $query->fetchColumn() !== false;
     }
     public  function create(string $email, string $motDePasseClair): User {
         $passwordHash = password_hash($motDePasseClair, PASSWORD_DEFAULT);
