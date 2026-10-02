@@ -436,7 +436,10 @@ main > ul {
   color: var(--text-muted);
   margin-top: auto;
 }
-
+.reseaux{
+  height: 32px;
+  width: 32px;
+}
 .footer-container {
   max-width: 960px;
   margin: 0 auto;
