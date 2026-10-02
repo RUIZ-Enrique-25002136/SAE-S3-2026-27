@@ -15,22 +15,25 @@ function connexion(): PDO
         }
 
         if (!extension_loaded('pdo_mysql')) {
-            die("Erreur configuration : L'extension PHP 'pdo_mysql' n'est pas activée. Veuillez l'activer dans votre php.ini (ex: /etc/php/php.ini)." . PHP_EOL);
+            die("Erreur configuration : l'extension PHP pdo_mysql n'est pas activée.");
         }
 
         $config = parse_ini_file($envFile);
+        if ($config === false) {
+            die('Erreur configuration : fichier .env illisible.');
+        }
 
-        $host = $config['DB_HOST'] ?? $config['HOST'] ?? 'localhost';
-        $dbname = $config['DB_NAME'] ?? $config['DB_DATABASE'] ?? 'sae_s3';
-        $user = $config['DB_USER'] ?? $config['SQL_USR'] ?? 'root';
-        $pass = $config['DB_PASS'] ?? $config['SQL_PWD'] ?? '';
-        $port = $config['DB_PORT'] ?? '3306';
+        foreach (['DB_HOST', 'DB_NAME', 'DB_USER', 'DB_PASS'] as $key) {
+            if (!isset($config[$key])) {
+                die("Erreur configuration : clé $key absente du fichier .env.");
+            }
+        }
 
         $dsn = sprintf(
             'mysql:host=%s;port=%s;dbname=%s;charset=utf8mb4',
-            $host,
-            $port,
-            $dbname
+            $config['DB_HOST'],
+            $config['DB_PORT'] ?? '3306',
+            $config['DB_NAME']
         );
 
         $options = [
@@ -40,9 +43,11 @@ function connexion(): PDO
         ];
 
         try {
-            $pdo = new PDO($dsn, $user, $pass, $options);
+            $pdo = new PDO($dsn, $config['DB_USER'], $config['DB_PASS'], $options);
         } catch (PDOException $e) {
-            die('Connexion échouée : ' . $e->getMessage());
+            error_log('Connexion BDD échouée : ' . $e->getMessage());
+            http_response_code(500);
+            die('Service momentanément indisponible.');
         }
     }
 
