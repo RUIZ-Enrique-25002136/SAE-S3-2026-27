@@ -48,11 +48,6 @@ if ($succes){
     <meta http-equiv="refresh" content="1;url=index.php">
     <p><a href="index.php">Cliquez ici si vous n'êtes pas redirigé.</a></p>
     HTML;
-<<<<<<< HEAD
-    header("location : /index.php");
-    exit();
-=======
->>>>>>> main
 }
 else{
     if (!empty($erreurs)){
