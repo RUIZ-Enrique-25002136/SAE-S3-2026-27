@@ -1,4 +1,5 @@
 <?php
+namespace App\models;
 final class User
 {
 public function __construct(
