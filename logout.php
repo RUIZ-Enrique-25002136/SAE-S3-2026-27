@@ -1,6 +1,8 @@
 <?php
 require_once 'includes/header.php';
 require_once 'includes/footer.php';
+session_start();
+$_SESSION = [];
 session_destroy();
 buildHeader('Déconnexion');
 echo <<< HTML
