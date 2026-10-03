@@ -1,3 +1,7 @@
+<?php
+/** @var string[] $erreurs */
+/** @var bool $succes */
+?>
 <?php foreach ($erreurs as $erreur) : ?>
     <ul><li><?= htmlspecialchars($erreur) ?></li></ul>
 <?php endforeach; ?>

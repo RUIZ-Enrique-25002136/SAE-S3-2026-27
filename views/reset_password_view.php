@@ -1,3 +1,9 @@
+<?php
+/** @var bool $success */
+/** @var string[] $erreurs */
+/** @var bool $tokenValide */
+?>
+
 <?php if ($success): ?>
     Mot de passe réinitialisé
     <a href="login.php">Vous Conneter</a>
