@@ -4,7 +4,7 @@ class UserModel {
     public function __construct(private PDO $pdo) {}
 
     public function setToken(string $email, string $token): bool {
-        $stmt = $this->pdo->prepare("UPDATE utilisateur SET verify_token = ? WHERE email = ?");
+        $stmt = $this->pdo->prepare("UPDATE users SET verify_token = ? WHERE email = ?");
         $stmt->execute([$token, $email]);
         return $stmt->rowCount() > 0;
     }

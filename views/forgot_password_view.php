@@ -9,7 +9,7 @@
 <?php if ($succes) : ?>
     <p>Si cet email existe, un lien vient d'être envoyé</p>
 <?php else: ?>
-    <form method="post" action="forgot_password.php">
+    <form method="post" action="../forgot_password.php">
         <p>
             <label for="email">Email</label><br>
             <input type="email" id="email" name="email" required>

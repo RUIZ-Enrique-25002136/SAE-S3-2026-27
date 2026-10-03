@@ -28,9 +28,7 @@
                             mail($email, 'Pour réinitialiser ton mot de passe', 'Clique ici : ' . $link);
                         }
                         $succes = true;
-                    } catch (PDOException $e) {
-                        $erreurs[] = 'Une erreur s\'est produite';
-                    } catch (\Random\RandomException $e) {
+                    } catch (PDOException|\Random\RandomException $e) {
                         $erreurs[] = 'Une erreur s\'est produite';
                     }
                 }
@@ -45,7 +43,7 @@
         {
             $erreurs = [];
             $succes = false;
-            $token = $_POST['token'] ?? $_GET['token'];
+            $token = $_POST['token'] ?? $_GET['token'] ?? '';
 
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $password = $_POST['password'];

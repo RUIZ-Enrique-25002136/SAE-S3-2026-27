@@ -1,5 +1,5 @@
 <?php
-    require_once 'includes/footer.php';
+    require_once 'includes/connnexion_db.php';
     require_once 'controllers/ForgotPasswordController.php';
 
     $pdo = connexion();
