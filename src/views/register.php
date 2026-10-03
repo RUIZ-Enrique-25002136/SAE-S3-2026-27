@@ -20,7 +20,7 @@ if ($success) :?>
 <form method="post" action="register.php">
     <p>
         <label for="email">Email</label><br>
-        <input type="email" id="email" name="email" value="<?= htmlspecialchars($email ?? '') ?>" required>
+        <input type="email" id="email" name="email" value="<?= htmlspecialchars($email) ?>" required>
     </p>
     <p>
         <label for="password">Mot de passe</label><br>
