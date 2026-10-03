@@ -22,7 +22,7 @@ class ForgotPasswordController
 
     public function forgot(): void
     {
-        $config = parse_ini_file(__DIR__ . '/.././.env');
+        $config = parse_ini_file(__DIR__ . '/../../.env');
         $siteUrl = $config['SITE_URL'] ?? 'https://beghin.alwaysdata.net';
         $erreurs = [];
         $succes = false;
