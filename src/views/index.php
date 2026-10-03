@@ -1,12 +1,12 @@
 <?php
-/** @var array|null $utilisateur */
+/** @var array $utilisateur */
 ?>
 <div class="card welcome-card">
     <h1>Bienvenue</h1>
 
     <?php if ($utilisateur !== ''): ?>
         <p class="welcome-text">Bonjour <strong><?= htmlspecialchars($utilisateur['email'] ?? $utilisateur['login'] ?? '') ?></strong>, vous êtes connecté.</p>
-        <form method= 'post' action = 'logout.php' class="card-actions">
+        <form method= 'post' action = '/SAE-S3-2026-27/logout.php' class="card-actions">
             <button type="submit" class="btn btn-secondary">Déconnexion</button>
         </form>
     <?php else: ?>

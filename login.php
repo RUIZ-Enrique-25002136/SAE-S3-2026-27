@@ -9,7 +9,6 @@ use App\models\UserRepository;
 
 buildHeader();
 $erreurs = [];
-$email = '';
 $success = false;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
