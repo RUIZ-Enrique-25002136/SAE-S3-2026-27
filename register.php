@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $erreurs[] = "Une erreur est survenue.";
             }
         }
-        $link = 'http://localhost/verify.php?token=' . $token;
+        $link = 'https://beghin.alwaysdata.net/verify.php?token=' . $token;
         mail($email, 'Confirme ton email', 'Clique ici : ' . $link);
 
     }
