@@ -1,6 +1,9 @@
 <?php
-session_start();
-$_SESSION = [];
+require_once 'includes/header.php';
+require_once 'includes/footer.php';
 session_destroy();
-header('Location: index.php');
-exit;
+buildHeader('Déconnexion');
+echo <<< HTML
+<h1>Vous vous êtes bien déconnecté.<h1> 
+HTML;
+buildFooter();
