@@ -4,6 +4,7 @@ namespace App\controllers;
 require_once 'autoload.php';
 
 use PDO;
+use PDOException;
 use App\models\UserRepository;
 
 require_once 'includes/header.php';
