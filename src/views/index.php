@@ -1,5 +1,5 @@
 <?php
-/** @var string $utilisateur */
+/** @var array{id: int, email: string}|null $utilisateur */
 ?>
 <div class="card welcome-card">
     <h1>Bienvenue</h1>
@@ -18,7 +18,3 @@
         </div>
     <?php endif; ?>
 </div>
-
-<?php if($utilisateur === null): ?>
-    <p>Vous n'êtes pas connecté. <a href="login.php">Connectez-vous</a> ou <a href="register.php">créez un compte</a>.</p>
-<?php endif; ?>
