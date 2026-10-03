@@ -68,6 +68,7 @@ else{
             <label for="password">Mot de passe</label><br>
             <input type="password" id="password" name="password" required>
         </p>
+        <a href="forgot_password.php"> Mot de passe oublié ?</a>
         <button name="action" type="submit" value = "connexion">Se connecter</button>
     </form>
 <?php buildFooter();?>
