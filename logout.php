@@ -6,6 +6,6 @@ $_SESSION = [];
 session_destroy();
 buildHeader('Déconnexion');
 echo <<< HTML
-<h1>Vous vous êtes bien déconnecté.<h1> 
+<h1>Vous vous êtes bien déconnecté.<\h1>
 HTML;
 buildFooter();
