@@ -24,7 +24,7 @@ final class UserRepository
     }
     public  function create(string $email, string $motDePasseClair,string $token): bool {
         $passwordHash = password_hash($motDePasseClair, PASSWORD_DEFAULT);
-        $query = $this->pdo->prepare('INSERT INTO `users` (`email`, `password`,`token`) VALUES (:email, :password ,:token)');
+        $query = $this->pdo->prepare('INSERT INTO `users` (`email`, `password`,`verify_token`) VALUES (:email, :password ,:token)');
         try{
            return $query->execute(['email' => $email, 'password' => $passwordHash, 'token' => $token]);
         }

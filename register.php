@@ -34,12 +34,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
         else{
             $res = $userRepository -> create($email,$password,$token);
-            if(!$res){
+            if($res){
+                $link = $siteUrl . '/verify.php?token=' . $token;
+                mail($email, 'Confirme ton email', 'Clique ici : ' . $link);
+                $success = true;}
+            else{
                 $erreurs[] = "Une erreur est survenue";
             }
-            $link = $siteUrl . '/verify.php?token=' . $token;
-            mail($email, 'Confirme ton email', 'Clique ici : ' . $link);
-            $success = true;}
+            }
     }
 
 }
