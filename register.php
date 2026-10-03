@@ -2,9 +2,12 @@
 require_once "includes/header.php";
 require_once "includes/footer.php";
 require_once "includes/connnexion_db.php";
+$config = parse_ini_file(__DIR__ . '/.env');
+$siteUrl = $config['SITE_URL'] ?? 'https://beghin.alwaysdata.net';
+
 buildHeader();
 $erreurs = [];
-$succes = false;
+$success = false;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
@@ -21,13 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($erreurs)) {
-        try {
-            $pdo = connexion();
-            $pdo->exec("SET CHARACTER SET utf8");
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        } catch (PDOException $e) {
-            die('Erreur : ' . $e->getMessage());
-        }
+        $pdo = connexion();
+
         $passwordHash = password_hash($password, PASSWORD_DEFAULT);
         $token = bin2hex(random_bytes(32));
         $sql = "INSERT INTO users(email,password, verify_token) VALUES (:email,:password, :token)";
@@ -37,30 +35,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindValue(":token", $token, PDO::PARAM_STR);
         try{
             $stmt->execute();
-            $succes = true;
+            $success = true;
         } catch (PDOException $e) {
             if ($e->getCode() === '23000') {
                 $erreurs[] = "Cet email est déjà utilisé.";
+                $success = false;
             } else {
                 $erreurs[] = "Une erreur est survenue.";
+                $success = false;
             }
         }
-        $link = 'https://beghin.alwaysdata.net/verify.php?token=' . $token;
-        mail($email, 'Confirme ton email', 'Clique ici : ' . $link);
+        if ($success) {
+            $link = $siteUrl . '/verify.php?token=' . $token;
+            mail($email, 'Confirme ton email', 'Clique ici : ' . $link);
+        }
 
     }
 }
-if ($succes){
+if ($success){
     echo <<< HTML
     Inscription réussie.
-    Veullier verifier votre email.
+    Veuillez vérifier votre email.
     HTML;
 }
 else{
     if (!empty($erreurs)){
+        echo "<ul>";
      foreach ($erreurs as $erreur) {
-        echo "<ul><li>" . htmlspecialchars($erreur) . "</li></ul>";
+        echo htmlspecialchars($erreur) . "</li></ul>";
         }
+     echo "</ul>";
     }
 
 }?>
