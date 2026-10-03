@@ -47,7 +47,7 @@ class ForgotPasswordController
         }
 
         buildHeader();
-        require 'views/forgot_password_view.php';
+        require 'src/views/forgot_password_view.php';
         buildFooter();
     }
 
@@ -84,7 +84,7 @@ class ForgotPasswordController
         $tokenValide = !$succes && $this->users->tokenExists($token);
 
         buildHeader();
-        require 'views/reset_password_view.php';
+        require 'src/views/reset_password_view.php';
         buildFooter();
     }
 }
