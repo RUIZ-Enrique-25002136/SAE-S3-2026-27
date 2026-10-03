@@ -12,6 +12,8 @@
 
         public function forgot(): void
         {
+            $config = parse_ini_file(__DIR__ . '/.env');
+            $siteUrl = $config['SITE_URL'] ?? 'https://beghin.alwaysdata.net';
             $erreurs = [];
             $succes = false;
 
@@ -24,7 +26,7 @@
                     try {
                         $token = bin2hex(random_bytes(32));
                         if ($this->users->setToken($email, $token)) {
-                            $link = 'https://beghin.alwaysdata.net/reset_password.php?token=' . $token;
+                            $link = $siteUrl . '/reset_password.php?token=' . $token;
                             mail($email, 'Pour réinitialiser ton mot de passe', 'Clique ici : ' . $link);
                         }
                         $succes = true;
