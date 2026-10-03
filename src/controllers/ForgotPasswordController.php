@@ -1,10 +1,11 @@
 <?php
 
-namespace controllers;
+namespace App\controllers;
+require_once 'autoload.php';
 
-use models\UserRepository;
 use PDO;
 use PDOException;
+use App\models\UserRepository;
 
 require_once 'includes/header.php';
 require_once 'includes/footer.php';

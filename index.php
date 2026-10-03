@@ -1,7 +1,6 @@
 <?php
-require_once  'includes/header.php';
-require_once 'includes/footer.php';
-session_start();
+require_once "includes/footer.php";
+require_once "includes/header.php";
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -25,9 +24,9 @@ buildHeader($titre);
 
     <?php if ($utilisateur !== ''): ?>
         <p class="welcome-text">Bonjour <strong><?= htmlspecialchars($utilisateur['email'] ?? $utilisateur['login'] ?? '') ?></strong>, vous êtes connecté.</p>
-        <div class="card-actions">
-            <a href="index.php?action=logout" class="btn btn-secondary">Déconnexion</a>
-        </div>
+        <form method= 'post' action = 'logout.php' class="card-actions">
+            <button type="submit" class="btn btn-secondary">Déconnexion</button>
+        </form>
     <?php else: ?>
         <p class="welcome-text">Vous n'êtes pas connecté.</p>
         <p>Veuillez vous identifier ou créer un compte pour accéder à votre espace</p>

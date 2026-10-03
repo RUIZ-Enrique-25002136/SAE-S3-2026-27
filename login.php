@@ -1,11 +1,12 @@
 <?php
-
-use models\UserRepository;
-
+namespace App;
 session_start();
+require_once __DIR__ . '/autoload.php';
+use App\models\UserRepository;
 require_once "includes/header.php";
 require_once "includes/footer.php";
 require_once "includes/connnexion_db.php";
+
 
 buildHeader();
 $erreurs = [];

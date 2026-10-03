@@ -1,5 +1,5 @@
 <?php
-    use controllers\ForgotPasswordController;
+    use App\controllers\ForgotPasswordController;
     require_once 'includes/connnexion_db.php';
 
     $pdo = connexion();
