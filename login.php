@@ -1,10 +1,11 @@
 <?php
+
+use models\UserRepository;
+
 session_start();
 require_once "includes/header.php";
 require_once "includes/footer.php";
 require_once "includes/connnexion_db.php";
-require_once "models/User.php";
-require_once "models/UserRepository.php";
 
 buildHeader();
 $erreurs = [];
@@ -35,9 +36,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $erreurs[] = 'email ou mot de passe incorrect';
             }
         } catch (PDOException $e) {
-            $erreurs[] = 'Une erreur de la base de donnée est survenue'; ;
+            $erreurs[] = 'Une erreur de la base de donnée est survenue';
         }
-
     }
 
 }}
