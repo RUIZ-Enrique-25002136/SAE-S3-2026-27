@@ -5,16 +5,18 @@ require_once __DIR__ . '/autoload.php';
 require_once __DIR__ . '/src/views/partials/header.php';
 require_once __DIR__ . '/src/views/partials/footer.php';
 require_once __DIR__ . '/includes/render.php';
+require_once __DIR__ . '/includes/connnexion_db.php';
 use App\models\UserRepository;
 
 buildHeader();
+$email = '';
 $erreurs = [];
 $success = false;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email'] ?? '');
-    $password = $_POST['password'] ?? '';
+    $email = trim($_POST['email']);
+    $password = $_POST['password'] ;
 
-    if (($_POST["action"] ?? '') === "connexion") {
+    if ($_POST["action"] === "connexion") {
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
         $erreurs[] = "adresse mail non valide";

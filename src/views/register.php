@@ -16,7 +16,7 @@ if ($success) :?>
     <?php endforeach; ?>
 <?php endif; ?>
 <?php endif; ?>
-<h1>S'inscrire</h1></ul>
+<h1>S'inscrire</h1>
 <form method="post" action="register.php">
     <p>
         <label for="email">Email</label><br>

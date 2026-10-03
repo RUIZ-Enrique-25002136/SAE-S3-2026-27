@@ -11,11 +11,11 @@ $siteUrl = $config['SITE_URL'] ?? 'https://beghin.alwaysdata.net';
 buildHeader();
 $erreurs = [];
 $success = false;
-
+$email= '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $email = trim($_POST['email'] ?? '');
-    $password = $_POST['password'] ?? '';
-    $confirmation = $_POST['confirmation'] ?? '';
+    $email = trim($_POST['email'] );
+    $password = $_POST['password'] ;
+    $confirmation = $_POST['confirmation'];
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $erreurs[] = "Email invalide.";
     }

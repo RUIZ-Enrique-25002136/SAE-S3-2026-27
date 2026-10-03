@@ -12,7 +12,7 @@
 <?php else : ?>
     <?php if (!empty($erreurs)) : ?>
         <?php foreach ($erreurs as $erreur): ?>
-             <ul><li> <?= htmlspecialchars($erreur) ?> </li></ul>;
+             <ul><li> <?= htmlspecialchars($erreur) ?> </li></ul>
         <?php endforeach; ?>
     <?php endif; ?>
 <?php endif ?>
