@@ -5,7 +5,7 @@
     <h1>Bienvenue</h1>
 
     <?php if ($utilisateur !== null): ?>
-        <p class="welcome-text">Bonjour <strong><?= htmlspecialchars($utilisateur['email'] ?? $utilisateur['login'] ?? '') ?></strong>, vous êtes connecté.</p>
+        <p class="welcome-text">Bonjour <strong><?= htmlspecialchars($utilisateur['email']) ?></strong>, vous êtes connecté.</p>
         <form method= 'post' action = 'logout.php' class="card-actions">
             <button type="submit" class="btn btn-secondary">Déconnexion</button>
         </form>
