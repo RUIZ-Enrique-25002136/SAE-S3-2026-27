@@ -4,9 +4,11 @@ session_start();
 require_once __DIR__ . '/autoload.php';
 use App\models\UserRepository;
 use PDOException;
+
 require_once "includes/header.php";
 require_once "includes/footer.php";
 require_once "includes/connnexion_db.php";
+
 
 buildHeader();
 $erreurs = [];
@@ -37,9 +39,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $erreurs[] = 'email ou mot de passe incorrect';
             }
         } catch (PDOException $e) {
-            $erreurs[] = 'Une erreur de la base de donnée est survenue'; ;
+            $erreurs[] = 'Une erreur de la base de donnée est survenue';
         }
-
     }
 
 }}
@@ -67,6 +68,7 @@ else{
             <label for="password">Mot de passe</label><br>
             <input type="password" id="password" name="password" required>
         </p>
+        <a href="forgot_password.php"> Mot de passe oublié ?</a>
         <button name="action" type="submit" value = "connexion">Se connecter</button>
     </form>
 <?php buildFooter();?>
