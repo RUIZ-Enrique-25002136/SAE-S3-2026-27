@@ -2,6 +2,7 @@
 /** @var bool $succes */
 /** @var string[] $erreurs */
 /** @var bool $tokenValide */
+/** @var $token */
 ?>
 
 <?php if ($succes): ?>
