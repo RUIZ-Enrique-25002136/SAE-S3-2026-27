@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $pdo->prepare($sql);
 
             $stmt->execute([$token, $email]);
-            $link = 'https://beghin.alwaysdata.net/verify.php?token=' . $token;
+            $link = 'https://beghin.alwaysdata.net/reset_password.php?token=' . $token;
             mail($email, 'Pour réinitialiser ton mot de passe', 'Clique ici : ' . $link);
             $succes = true;
         } catch (PDOException $e) {
