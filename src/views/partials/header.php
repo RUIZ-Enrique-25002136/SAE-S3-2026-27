@@ -23,7 +23,7 @@ function buildHeader(string $titre = 'Accueil') : void
         <nav class="nav-links">
             <a href="index.php" class="nav-item <?= ($currentPage === 'index.php' || $currentPage === '') ? 'active' : '' ?>">Accueil</a>
             <?php if ($utilisateur === null): ?>
-                <a href="login.php" class="nav-item <?= $currentPage === 'login.php' ? 'active' : '' ?>">Connexion</a>
+                <a href="../login.php" class="nav-item <?= $currentPage === 'login.php' ? 'active' : '' ?>">Connexion</a>
                 <a href="register.php" class="btn-register">Inscription</a>
             <?php else: ?>
                 <span class="user-badge"><?= htmlspecialchars($utilisateur['email'] ?? 'Connecté') ?></span>

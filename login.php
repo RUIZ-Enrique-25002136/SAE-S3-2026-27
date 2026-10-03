@@ -2,15 +2,15 @@
 namespace App;
 session_start();
 require_once __DIR__ . '/autoload.php';
+require_once __DIR__ . '/src/views/partials/header.php';
+require_once __DIR__ . '/src/views/partials/footer.php';
+require_once __DIR__ . '/includes/render.php';
 use App\models\UserRepository;
-require_once "includes/header.php";
-require_once "includes/footer.php";
-require_once "includes/connnexion_db.php";
-
 
 buildHeader();
 $erreurs = [];
-$succes = false;
+$email = '';
+$success = false;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
     $password = $_POST['password'] ?? '';
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $userRepository = new UserRepository($pdo);
             $user = $userRepository->findByEmail($email);
             if ($user != null && $user->verifierMotDePasse($password)){
-                $succes = true;
+                $success = true;
                 $_SESSION['email'] = $email;
                 $_SESSION['utilisateur'] = [
                         'id' => $user->id,
@@ -33,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 ];
             } else {
                 $erreurs[] = 'email ou mot de passe incorrect';
-
                 }
             }
 
@@ -41,31 +40,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 }
-if ($succes){
-    echo <<< HTML
-    <div class="success-message">Connexion réussie. Redirection...</div>
-    <meta http-equiv="refresh" content="1;url=index.php">
-    <p><a href="index.php">Cliquez ici si vous n'êtes pas redirigé.</a></p>
-    HTML;
-}
-else{
-    if (!empty($erreurs)){
-        foreach ($erreurs as $erreur) {
-            echo "<ul><li>" . htmlspecialchars($erreur) . "</li></ul>";
-        }
-    }
-}?>
-<h1>Connexion</h1>
-    <form method="post" action="login.php">
-        <p>
-            <label for="email">Email</label><br>
-            <input type="email" id="email" name="email" value="<?= htmlspecialchars($email ?? '') ?>" required>
-        </p>
-        <p>
-            <label for="password">Mot de passe</label><br>
-            <input type="password" id="password" name="password" required>
-        </p>
-        <a href="forgot_password.php"> Mot de passe oublié ?</a>
-        <button name="action" type="submit" value = "connexion">Se connecter</button>
-    </form>
-<?php buildFooter();?>
+render('login', ['erreurs' => $erreurs, 'success' => $success,'email'=>$email]);
+buildFooter();

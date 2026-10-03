@@ -1,8 +1,9 @@
 <?php
 require_once 'autoload.php';
 use App\models\UserRepository;
-require_once "includes/header.php";
-require_once "includes/footer.php";
+require_once __DIR__ . '/src/views/partials/header.php';
+require_once __DIR__ . '/src/views/partials/footer.php';
+require_once __DIR__ . '/includes/render.php';
 require_once "includes/connnexion_db.php";
 $config = parse_ini_file(__DIR__ . '/.env');
 $siteUrl = $config['SITE_URL'] ?? 'https://beghin.alwaysdata.net';
@@ -10,6 +11,7 @@ $siteUrl = $config['SITE_URL'] ?? 'https://beghin.alwaysdata.net';
 buildHeader();
 $erreurs = [];
 $success = false;
+$email ='';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email'] ?? '');
@@ -45,36 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
 }
-if ($success){
-    echo <<< HTML
-    Inscription réussie.
-    Veuillez vérifier votre email.
-    HTML;
-}
-else{
-    if (!empty($erreurs)){
-        echo "<ul>";
-     foreach ($erreurs as $erreur) {
-        echo htmlspecialchars($erreur) . "</li></ul>";
-        }
-     echo "</ul>";
-    }
 
-}?>
-<h1>S'inscrire</h1>
-<form method="post" action="register.php">
-    <p>
-        <label for="email">Email</label><br>
-        <input type="email" id="email" name="email" value="<?= htmlspecialchars($email ?? '') ?>" required>
-    </p>
-    <p>
-        <label for="password">Mot de passe</label><br>
-        <input type="password" id="password" name="password" required>
-    </p>
-    <p>
-        <label for="confirmation">Confirmation du mot de passe</label><br>
-        <input type="password" id="confirmation" name="confirmation" required>
-    </p>
-    <button name="action" type="submit" value = "inscription">S'inscrire</button>
-</form>
-<?php buildFooter();?>
+render('register', ['erreurs' => $erreurs, 'success' => $success,'email'=>$email]);
+buildFooter();
+
