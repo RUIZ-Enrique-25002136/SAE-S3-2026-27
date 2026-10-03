@@ -1,14 +1,14 @@
 <?php
 
 namespace App\controllers;
-require_once 'autoload.php';
+require_once  __DIR__ . '/src/views/partials/header.php';
+require_once  __DIR__ . '/src/views/partials/footer.php';
 
 use PDO;
 use PDOException;
 use App\models\UserRepository;
 
-require_once 'includes/header.php';
-require_once 'includes/footer.php';
+
 
 class ForgotPasswordController
 {
