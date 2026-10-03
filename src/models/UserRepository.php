@@ -2,6 +2,8 @@
 namespace App\models;
 use PDO;
 use App\models\User;
+use PDOException;
+
 final class UserRepository
 {
     public function __construct(private readonly PDO $pdo) {}
@@ -20,11 +22,16 @@ final class UserRepository
         $query->execute(['email' => $email]);
         return $query->fetchColumn() !== false;
     }
-    public  function create(string $email, string $motDePasseClair): User {
+    public  function create(string $email, string $motDePasseClair,string $token): bool {
         $passwordHash = password_hash($motDePasseClair, PASSWORD_DEFAULT);
-        $query = $this->pdo->prepare('INSERT INTO `users` (`email`, `password`) VALUES (:email, :password)');
-        $query->execute(['email' => $email, 'password' => $passwordHash]);
-        return new User((int) $this->pdo->lastInsertId(), $email, $passwordHash);
+        $query = $this->pdo->prepare('INSERT INTO `users` (`email`, `password`,`token`) VALUES (:email, :password ,:token)');
+        try{
+           return $query->execute(['email' => $email, 'password' => $passwordHash, 'token' => $token]);
+        }
+        catch(PDOException $e){
+            return false;
+        }
+
     }
 
     private function hydrater(array $ligne): User {

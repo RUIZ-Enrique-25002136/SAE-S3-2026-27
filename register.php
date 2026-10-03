@@ -1,4 +1,6 @@
 <?php
+require_once 'autoload.php';
+use App\models\UserRepository;
 require_once "includes/header.php";
 require_once "includes/footer.php";
 require_once "includes/connnexion_db.php";
@@ -25,32 +27,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($erreurs)) {
         $pdo = connexion();
-
-        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
         $token = bin2hex(random_bytes(32));
-        $sql = "INSERT INTO users(email,password, verify_token) VALUES (:email,:password, :token)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->bindValue(':email', $email, PDO::PARAM_STR);
-        $stmt->bindValue(':password', $passwordHash, PDO::PARAM_STR);
-        $stmt->bindValue(":token", $token, PDO::PARAM_STR);
-        try{
-            $stmt->execute();
-            $success = true;
-        } catch (PDOException $e) {
-            if ($e->getCode() === '23000') {
-                $erreurs[] = "Cet email est déjà utilisé.";
-                $success = false;
-            } else {
-                $erreurs[] = "Une erreur est survenue.";
-                $success = false;
-            }
+        $userRepository = new UserRepository($pdo);
+        if($userRepository-> emailExists($email)) {
+            $erreurs[] = "Cet email est déjà utilisé.";
         }
-        if ($success) {
+        else{
+            $res = $userRepository -> create($email,$password,$token);
+            if(!$res){
+                $erreurs[] = "Une erreur est survenue";
+            }
             $link = $siteUrl . '/verify.php?token=' . $token;
             mail($email, 'Confirme ton email', 'Clique ici : ' . $link);
-        }
-
+            $success = true;}
     }
+
 }
 if ($success){
     echo <<< HTML

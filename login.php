@@ -4,7 +4,6 @@ session_start();
 require_once __DIR__ . '/autoload.php';
 use App\models\UserRepository;
 use PDOException;
-
 require_once "includes/header.php";
 require_once "includes/footer.php";
 require_once "includes/connnexion_db.php";
@@ -23,11 +22,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erreurs[] = "adresse mail non valide";
     }
     if(empty($erreurs)){
-        try{
             $pdo = connexion();
             $userRepository = new UserRepository($pdo);
-            $user = $userRepository -> findByEmail($email);
-
+            $user = $userRepository->findByEmail($email);
             if ($user != null && $user->verifierMotDePasse($password)){
                 $succes = true;
                 $_SESSION['email'] = $email;
@@ -38,12 +35,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $erreurs[] = 'email ou mot de passe incorrect';
             }
-        } catch (PDOException $e) {
-            $erreurs[] = 'Une erreur de la base de donnée est survenue';
+            if(empty($erreurs) && !isset($_SESSION['email']))
+                $erreurs[] = 'Une erreur est survenue';
         }
     }
 
-}}
+}
 if ($succes){
     echo <<< HTML
     <div class="success-message">Connexion réussie. Redirection...</div>
