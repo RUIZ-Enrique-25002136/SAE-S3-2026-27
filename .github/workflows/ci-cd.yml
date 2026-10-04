@@ -34,6 +34,19 @@ jobs:
       - name: Analyse statique
         run: phpstan analyse --no-progress --error-format=github
 
+  tests:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+          tools: phpunit:11
+      - name: Tests unitaires
+        run: phpunit
+
   database:
     name: Schéma SQL (MariaDB 11.4)
     runs-on: ubuntu-latest
@@ -66,7 +79,7 @@ jobs:
 
   deploy:
     name: Déploiement Alwaysdata
-    needs: [ lint, phpstan, database ]
+    needs: [ lint, phpstan, tests, database ]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     concurrency:

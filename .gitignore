@@ -219,6 +219,9 @@ $RECYCLE.BIN/
 # Ai
 .ai
 
+# PHPUnit
+.phpunit.result.cache
+
 # Sujet du projet
 s24-projet.pdf
 
