@@ -1,8 +1,8 @@
 <?php
 
 namespace App\controllers;
-require_once  __DIR__ . '/src/views/partials/header.php';
-require_once  __DIR__ . '/src/views/partials/footer.php';
+require_once  __DIR__ . '/../views/partials/header.php';
+require_once  __DIR__ . '/../views/partials/footer.php';
 
 use PDO;
 use PDOException;
