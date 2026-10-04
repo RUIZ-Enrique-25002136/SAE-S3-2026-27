@@ -6,7 +6,7 @@
 */
  if ($success) :?>
     <div class="success-message">Connexion réussie. Redirection...</div>
-    <meta http-equiv="refresh" content="1;url=index.php">
+    <meta http-equiv="refresh" content="1;url=/">
     <p><a href="/">Cliquez ici si vous n'êtes pas redirigé.</a></p>
 
 <?php else : ?>

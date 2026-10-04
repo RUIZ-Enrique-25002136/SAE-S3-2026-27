@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         else{
             $res = $userRepository -> create($email,$password,$token);
             if($res){
-                $link = $siteUrl . '/verify.php?token=' . $token;
+                $link = $siteUrl . '/verify?token=' . $token;
                 mail($email, 'Confirme ton email', 'Clique ici : ' . $link);
                 $success = true;}
             else{

@@ -7,8 +7,4 @@ spl_autoload_register(function (string $class) : void
         return;
     }
     $relative_class = substr($class, strlen($prefixe));
-    $file = __DIR__ . DIRECTORY_SEPARATOR . 'src' . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $relative_class) . '.php';
-    if(file_exists($file)){
-        require $file;
-    }
 });
