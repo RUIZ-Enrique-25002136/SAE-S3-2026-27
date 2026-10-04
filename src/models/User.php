@@ -9,8 +9,8 @@ public readonly string $passwordHash,
 ) {
 }
 
-public function verifierMotDePasse(string $motDePasse): bool
+public function verifyPassword(string $password): bool
 {
-return password_verify($motDePasse, $this->passwordHash);
+return password_verify($password, $this->passwordHash);
 }
 }

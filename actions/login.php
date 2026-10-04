@@ -4,7 +4,7 @@ use App\models\UserRepository;
 
 buildHeader();
 $email = '';
-$erreurs = [];
+$errors = [];
 $success = false;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
@@ -13,21 +13,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($_POST["action"] === "connexion") {
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
-        $erreurs[] = "adresse mail non valide";
+        $errors[] = "adresse mail non valide";
     }
-    if(empty($erreurs)){
-        $pdo = connexion();
+    if(empty($errors)){
+        $pdo = getConnection();
             $userRepository = new UserRepository($pdo);
             $user = $userRepository->findByEmail($email);
-            if ($user != null && $user->verifierMotDePasse($password)){
+            if ($user != null && $user->verifyPassword($password)){
                 $success = true;
                 $_SESSION['email'] = $email;
-                $_SESSION['utilisateur'] = [
+                $_SESSION['user'] = [
                         'id' => $user->id,
                     'email' => $user->email,
                 ];
             } else {
-                $erreurs[] = 'email ou mot de passe incorrect';
+                $errors[] = 'email ou mot de passe incorrect';
                 }
             }
 
@@ -35,5 +35,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
 }
-render('login', ['erreurs' => $erreurs, 'success' => $success,'email'=>$email]);
+render('login', ['errors' => $errors, 'success' => $success,'email'=>$email]);
 buildFooter();

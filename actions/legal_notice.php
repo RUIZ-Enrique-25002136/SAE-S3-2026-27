@@ -1,7 +1,7 @@
 <?php
 
-$titre = 'Mentions légales';
-buildHeader($titre);
+$title = 'Mentions légales';
+buildHeader($title);
 ?>
 
 <div class="card mentions-card">

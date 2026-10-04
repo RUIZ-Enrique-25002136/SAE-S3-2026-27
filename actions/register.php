@@ -4,7 +4,7 @@ $config = parse_ini_file(dirname(__DIR__) . '/.env');
 $siteUrl = $config['SITE_URL'] ?? 'https://beghin.alwaysdata.net';
 
 buildHeader();
-$erreurs = [];
+$errors = [];
 $success = false;
 $email= '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -12,36 +12,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $password = $_POST['password'] ;
     $confirmation = $_POST['confirmation'];
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        $erreurs[] = "Email invalide.";
+        $errors[] = "Email invalide.";
     }
     if (strlen($password) < 8) {
-        $erreurs[] = "Le mot de passe doit contenir au moins 8 caractères.";
+        $errors[] = "Le mot de passe doit contenir au moins 8 caractères.";
     }
     if ($password !== $confirmation) {
-        $erreurs[] = "Les mots de passe ne correspondent pas.";
+        $errors[] = "Les mots de passe ne correspondent pas.";
     }
 
-    if (empty($erreurs)) {
+    if (empty($errors)) {
         $token = bin2hex(random_bytes(32));
-        $pdo = connexion();
+        $pdo = getConnection();
         $userRepository = new UserRepository($pdo);
         if($userRepository-> emailExists($email)) {
-            $erreurs[] = "Cet email est déjà utilisé.";
+            $errors[] = "Cet email est déjà utilisé.";
         }
         else{
-            $res = $userRepository -> create($email,$password,$token);
-            if($res){
+            $created = $userRepository -> create($email,$password,$token);
+            if($created){
                 $link = $siteUrl . '/verify?token=' . $token;
                 mail($email, 'Confirme ton email', 'Clique ici : ' . $link);
                 $success = true;}
             else{
-                $erreurs[] = "Une erreur est survenue";
+                $errors[] = "Une erreur est survenue";
             }
             }
     }
 
 }
 
-render('register', ['erreurs' => $erreurs, 'success' => $success,'email'=>$email]);
+render('register', ['errors' => $errors, 'success' => $success,'email'=>$email]);
 buildFooter();
 

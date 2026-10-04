@@ -1,6 +1,6 @@
 <?php
 
-function connexion(): PDO
+function getConnection(): PDO
 {
     static $pdo = null;
         $envFile = __DIR__ . '/.env';

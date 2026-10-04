@@ -1,12 +1,12 @@
 <?php
-/** @var string[] $erreurs */
-/** @var bool $succes */
+/** @var string[] $errors */
+/** @var bool $success */
 ?>
-<?php foreach ($erreurs as $erreur) : ?>
-    <ul><li><?= htmlspecialchars($erreur) ?></li></ul>
+<?php foreach ($errors as $error) : ?>
+    <ul><li><?= htmlspecialchars($error) ?></li></ul>
 <?php endforeach; ?>
 
-<?php if ($succes) : ?>
+<?php if ($success) : ?>
     <p>Si cet email existe, un lien vient d'être envoyé</p>
 <?php else: ?>
     <form method="post" action="/forgot-password">

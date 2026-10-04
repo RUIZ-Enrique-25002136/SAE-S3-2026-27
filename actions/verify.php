@@ -1,7 +1,7 @@
 <?php
 $token = $_GET['token'] ?? '';
 
-$pdo = connexion();
+$pdo = getConnection();
 $stmt = $pdo->prepare("UPDATE users SET verified = TRUE, verify_token = NULL WHERE verify_token = ?");
 $stmt->execute([$token]);
 

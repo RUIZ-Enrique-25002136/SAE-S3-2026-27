@@ -15,15 +15,15 @@ final class UserRepository
         if (!$row){
             return null;
         }
-        return $this->hydrater($row);
+        return $this->hydrate($row);
     }  // null si absent
     public function emailExists(string $email): bool {
         $query = $this->pdo->prepare('SELECT 1 FROM `users` WHERE `email` = :email LIMIT 1');
         $query->execute(['email' => $email]);
         return $query->fetchColumn() !== false;
     }
-    public  function create(string $email, string $motDePasseClair,string $token): bool {
-        $passwordHash = password_hash($motDePasseClair, PASSWORD_DEFAULT);
+    public  function create(string $email, string $plainPassword,string $token): bool {
+        $passwordHash = password_hash($plainPassword, PASSWORD_DEFAULT);
         $query = $this->pdo->prepare('INSERT INTO `users` (`email`, `password`,`verify_token`) VALUES (:email, :password ,:token)');
         try{
            return $query->execute(['email' => $email, 'password' => $passwordHash, 'token' => $token]);
@@ -34,8 +34,8 @@ final class UserRepository
 
     }
 
-    private function hydrater(array $ligne): User {
-        return new User($ligne['id'], $ligne['email'], $ligne['password']);
+    private function hydrate(array $row): User {
+        return new User($row['id'], $row['email'], $row['password']);
     }     // une ligne SQL -> un objet, en un seul endroit
 
     // rentre le token dans la base de donnée

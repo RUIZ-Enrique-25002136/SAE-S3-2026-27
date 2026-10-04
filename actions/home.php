@@ -1,14 +1,14 @@
 <?php
 
-$utilisateur = $_SESSION['utilisateur'] ?? '';
+$user = $_SESSION['user'] ?? '';
 
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     header('Location: /logout');
     exit;
 }
 
-$titre = 'Accueil';
-buildHeader($titre);
+$title = 'Accueil';
+buildHeader($title);
 
 render('home');
 buildfooter();

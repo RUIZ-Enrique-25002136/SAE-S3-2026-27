@@ -1,6 +1,6 @@
 <?php
-    use App\controllers\ForgotPasswordController;
+    use App\controllers\PasswordController;
 
-    $pdo = connexion();
-    $controller = new ForgotPasswordController($pdo);
+    $pdo = getConnection();
+    $controller = new PasswordController($pdo);
     $controller->forgot();

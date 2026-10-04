@@ -1,19 +1,19 @@
 <?php
-/** @var bool $succes */
-/** @var string[] $erreurs */
-/** @var bool $tokenValide */
+/** @var bool $success */
+/** @var string[] $errors */
+/** @var bool $isTokenValid */
 /** @var string $token */
 ?>
 
-<?php if ($succes): ?>
+<?php if ($success): ?>
     Mot de passe réinitialisé
     <a href="/login">Vous Connecter</a>
 <?php else: ?>
-    <?php foreach ($erreurs as $erreur): ?>
-        <ul><li><?= htmlspecialchars($erreur) ?></li></ul>
+    <?php foreach ($errors as $error): ?>
+        <ul><li><?= htmlspecialchars($error) ?></li></ul>
     <?php endforeach; ?>
 
-    <?php if ($tokenValide): ?>
+    <?php if ($isTokenValid): ?>
         <form method="post" action="/reset-password">
             <input type="hidden" name="token" value="<?= htmlspecialchars($token) ?>">
             <p>
