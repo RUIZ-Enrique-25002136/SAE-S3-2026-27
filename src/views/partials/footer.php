@@ -1,4 +1,9 @@
 <?php
+/**
+ * Affiche la fin de la page : fermeture de <main>, pied de page et fermeture du document.
+ *
+ * @return void
+ */
 function buildFooter() : void
 {
 ?>

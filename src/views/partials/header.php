@@ -1,4 +1,10 @@
 <?php
+/**
+ * Affiche le début de la page : <head>, menu de navigation et ouverture de <main>.
+ *
+ * @param string $title Titre de la page, affiché dans l'onglet
+ * @return void
+ */
 function buildHeader(string $title = 'Accueil') : void
 {
     if (session_status() === PHP_SESSION_NONE) {

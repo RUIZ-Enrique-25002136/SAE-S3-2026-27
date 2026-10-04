@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * Chargement automatique des classes App\... depuis src/ (par exemple App\Models\User → src/Models/User.php).
+ */
 spl_autoload_register(function (string $class) : void
 {
     $prefix = "App\\";

@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Ouvre la connexion PDO à MariaDB avec les paramètres du fichier .env.
+ * En cas d'échec, l'erreur est écrite dans le journal du serveur et le visiteur voit une erreur 500.
+ *
+ * @return PDO Connexion configurée (exceptions, tableaux associatifs, vraies requêtes préparées)
+ */
 function getConnection(): PDO
 {
     static $pdo = null;

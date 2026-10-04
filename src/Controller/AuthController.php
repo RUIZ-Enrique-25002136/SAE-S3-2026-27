@@ -3,14 +3,31 @@ namespace App\Controller;
 
 use App\Models\UserRepository;
 
+/**
+ * Inscription, connexion, déconnexion et confirmation de l'adresse email.
+ */
 class AuthController {
+    /**
+     * @param UserRepository $users Accès aux comptes utilisateurs
+     */
     public function __construct(private UserRepository $users) {}
 
+    /**
+     * Affiche le formulaire de connexion (GET /login).
+     *
+     * @return void
+     */
     public function loginForm(): void
     {
         $this->showLogin([], false, '');
     }
 
+    /**
+     * Traite le formulaire de connexion (POST /login) : jeton CSRF, email, mot de passe
+     * et compte vérifié, puis ouvre la session avec un nouvel identifiant.
+     *
+     * @return void
+     */
     public function login(): void {
         $email = trim($_POST['email']);
         $password = $_POST['password'] ;
@@ -43,16 +60,35 @@ class AuthController {
         $this->showLogin($errors, $success, $email);
     }
 
+    /**
+     * Affiche la page de connexion.
+     *
+     * @param string[] $errors  Messages d'erreur à afficher
+     * @param bool     $success true si la connexion a réussi
+     * @param string   $email   Email à pré-remplir dans le formulaire
+     * @return void
+     */
     private function showLogin(array $errors, bool $success, string $email): void {
         buildHeader();
         render('login', ['errors' => $errors, 'success' => $success, 'email' => $email]);
         buildFooter();
     }
 
+    /**
+     * Affiche le formulaire d'inscription (GET /register).
+     *
+     * @return void
+     */
     public function registerForm(): void {
         $this->showRegister([], false, '');
     }
 
+    /**
+     * Traite le formulaire d'inscription (POST /register) : crée le compte
+     * et envoie le lien de confirmation par mail.
+     *
+     * @return void
+     */
     public function register(): void {
         $email = trim($_POST['email'] );
         $password = $_POST['password'] ;
@@ -94,12 +130,25 @@ class AuthController {
         $this->showRegister($errors, $success, $email);
     }
 
+    /**
+     * Affiche la page d'inscription.
+     *
+     * @param string[] $errors  Messages d'erreur à afficher
+     * @param bool     $success true si le compte a été créé
+     * @param string   $email   Email à pré-remplir dans le formulaire
+     * @return void
+     */
     private function showRegister(array $errors, bool $success, string $email): void {
         buildHeader();
         render('register', ['errors' => $errors, 'success' => $success,'email'=>$email]);
         buildFooter();
     }
 
+    /**
+     * Ferme la session puis redirige vers l'accueil (GET ou POST /logout).
+     *
+     * @return void
+     */
     public function logout(): void {
         $_SESSION = [];
         session_destroy();
@@ -107,6 +156,11 @@ class AuthController {
         exit;
     }
 
+    /**
+     * Confirme l'adresse email à partir du jeton du lien (GET /verify?token=...).
+     *
+     * @return void
+     */
     public function verify(): void {
         $token = $_GET['token'] ?? '';
         $success = $token !== '' && $this->users->verifyEmail($token);
