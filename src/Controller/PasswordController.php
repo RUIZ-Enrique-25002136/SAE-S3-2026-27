@@ -9,11 +9,22 @@ use App\Models\UserRepository;
 
 
 
+/**
+ * Mot de passe oublié : demande d'un lien par mail, puis choix d'un nouveau mot de passe.
+ */
 class PasswordController
 {
-    // intitiallise la variable pdo pour quelle puisse catch les erreur et initiallise l'objet user
+    /**
+     * @param UserRepository $users Accès aux comptes utilisateurs
+     */
     public function __construct(private UserRepository $users) {}
 
+    /**
+     * Affiche et traite le formulaire « mot de passe oublié » (GET et POST /forgot-password).
+     * Le même message est affiché que l'email existe ou non, pour ne pas révéler les comptes.
+     *
+     * @return void
+     */
     public function forgot(): void
     {
         //load les variables d'environnements
@@ -52,6 +63,11 @@ class PasswordController
         buildFooter();
     }
 
+    /**
+     * Affiche et traite le formulaire de nouveau mot de passe (GET et POST /reset-password).
+     *
+     * @return void
+     */
     public function reset(): void
     {
         $errors = [];
