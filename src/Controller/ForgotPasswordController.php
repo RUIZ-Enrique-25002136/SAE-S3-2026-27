@@ -47,7 +47,7 @@ class ForgotPasswordController
 
         buildHeader();
         //affiche la vue
-        render('forgotPassword', ['erreurs' => $erreurs, 'succes' => $succes]);
+        render('forgot_password_view', ['erreurs' => $erreurs, 'succes' => $succes]);
         buildFooter();
     }
 
@@ -88,7 +88,7 @@ class ForgotPasswordController
 
         buildHeader();
         // affiche la vue
-        render('resetPassword', ['erreurs' => $erreurs, 'succes' => $succes, 'tokenValide' => $tokenValide, 'token' => $token]);
+        render('reset_password_view', ['erreurs' => $erreurs, 'succes' => $succes, 'tokenValide' => $tokenValide, 'token' => $token]);
         buildFooter();
     }
 }

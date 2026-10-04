@@ -21,7 +21,7 @@ class AuthController {
             $erreurs[] = "adresse mail non valide";
         }
         if(empty($erreurs)){
-            $user = $this->user->findByEmail($email);
+            $user = $this->users->findByEmail($email);
             if ($user != null && $user->verifierMotDePasse($password)){
                 $success = true;
                 $_SESSION['email'] = $email;
