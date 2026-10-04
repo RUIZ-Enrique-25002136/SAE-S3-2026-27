@@ -1,6 +1,4 @@
 <?php
-require_once __DIR__ . '/src/views/partials/header.php';
-require_once __DIR__ . '/src/views/partials/footer.php';
 
 $titre = 'Mentions légales';
 buildHeader($titre);
@@ -66,7 +64,7 @@ buildHeader($titre);
     </section>
 
     <div class="card-actions">
-        <a href="index.php" class="btn btn-secondary">Retour à l'accueil</a>
+        <a href="/" class="btn btn-secondary">Retour à l'accueil</a>
     </div>
 </div>
 

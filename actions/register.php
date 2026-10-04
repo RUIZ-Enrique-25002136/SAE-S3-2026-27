@@ -1,11 +1,6 @@
 <?php
-require_once 'autoload.php';
 use App\models\UserRepository;
-require_once __DIR__ . '/src/views/partials/header.php';
-require_once __DIR__ . '/src/views/partials/footer.php';
-require_once __DIR__ . '/includes/render.php';
-require_once "includes/connnexion_db.php";
-$config = parse_ini_file(__DIR__ . '/.env');
+$config = parse_ini_file(dirname(__DIR__) . '/.env');
 $siteUrl = $config['SITE_URL'] ?? 'https://beghin.alwaysdata.net';
 
 buildHeader();
@@ -27,8 +22,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($erreurs)) {
-        $pdo = connexion();
         $token = bin2hex(random_bytes(32));
+        $pdo = connexion();
         $userRepository = new UserRepository($pdo);
         if($userRepository-> emailExists($email)) {
             $erreurs[] = "Cet email est déjà utilisé.";
@@ -36,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         else{
             $res = $userRepository -> create($email,$password,$token);
             if($res){
-                $link = $siteUrl . '/verify.php?token=' . $token;
+                $link = $siteUrl . '/verify?token=' . $token;
                 mail($email, 'Confirme ton email', 'Clique ici : ' . $link);
                 $success = true;}
             else{

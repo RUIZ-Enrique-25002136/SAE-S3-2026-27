@@ -1,11 +1,5 @@
 <?php
 namespace App;
-session_start();
-require_once __DIR__ . '/autoload.php';
-require_once __DIR__ . '/src/views/partials/header.php';
-require_once __DIR__ . '/src/views/partials/footer.php';
-require_once __DIR__ . '/includes/render.php';
-require_once __DIR__ . '/includes/connnexion_db.php';
 use App\models\UserRepository;
 
 buildHeader();
@@ -22,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erreurs[] = "adresse mail non valide";
     }
     if(empty($erreurs)){
-            $pdo = connexion();
+        $pdo = connexion();
             $userRepository = new UserRepository($pdo);
             $user = $userRepository->findByEmail($email);
             if ($user != null && $user->verifierMotDePasse($password)){

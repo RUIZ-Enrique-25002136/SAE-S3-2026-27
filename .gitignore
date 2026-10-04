@@ -216,6 +216,9 @@ $RECYCLE.BIN/
 # Env
 .env
 
+# Ai
+.ai
+
 # Sujet du projet
 s24-projet.pdf
 

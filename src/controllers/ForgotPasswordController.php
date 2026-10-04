@@ -42,7 +42,7 @@ class ForgotPasswordController
                     $token = bin2hex(random_bytes(32));
                     //si le token est bien rentrée dans la table envoie un lien vers la pages de reset_password avec le token dans l'URL
                     if ($this->users->setToken($email, $token)) {
-                        $link = $siteUrl . '/reset_password.php?token=' . $token;
+                        $link = $siteUrl . '/reset-password?token=' . $token;
                         mail($email, 'Pour réinitialiser ton mot de passe', 'Clique ici : ' . $link);
                     }
                     $succes = true;
