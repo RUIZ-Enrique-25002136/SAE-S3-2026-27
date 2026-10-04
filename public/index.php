@@ -1,57 +1,57 @@
 <?php
 
 use App\Controller\AuthController;
-use App\Controller\ForgotPasswordController;
+use App\Controller\PasswordController;
 use App\Controller\HomeController;
-use App\models\UserRepository;
+use App\Models\UserRepository;
 
 if (PHP_SAPI == 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)))
     return false;
 
-$racine = dirname(__DIR__);
+$root = dirname(__DIR__);
 
-require $racine . '/autoload.php';
-require $racine . '/includes/render.php';
-require $racine . '/includes/connnexion_db.php';
-require_once $racine . '/src/views/partials/header.php';
-require_once $racine . '/src/views/partials/footer.php';
+require $root . '/autoload.php';
+require $root . '/includes/render.php';
+require $root . '/includes/database.php';
+require_once $root . '/src/views/partials/header.php';
+require_once $root . '/src/views/partials/footer.php';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$pdo = connexion();
+$pdo = getConnection();
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $users = new UserRepository($pdo);
 
-$constructeurs = [
+$factories = [
     HomeController::class           => fn() => new HomeController(),
     AuthController::class           => fn() => new AuthController($users),
-    ForgotPasswordController::class => fn() => new ForgotPasswordController($users),
+    PasswordController::class => fn() => new PasswordController($users),
 ];
 
 $table = [];
-foreach (require $racine . '/config/routes.php' as $route) {
-    [$verbe, $url, $handler] = $route;
-    $table[$url][$verbe] = $handler;
+foreach (require $root . '/config/routes.php' as $route) {
+    [$verb, $url, $handler] = $route;
+    $table[$url][$verb] = $handler;
 }
 
-$methode = $_SERVER['REQUEST_METHOD'];
-$chemin = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';
-$chemin = rtrim($chemin, '/') ?: '/';
+$method = $_SERVER['REQUEST_METHOD'];
+$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';
+$path = rtrim($path, '/') ?: '/';
 
-if (!isset($table[$chemin])) {
+if (!isset($table[$path])) {
     http_response_code(404);
-    render('404', ['chemin' => $chemin]);
+    render('404', ['path' => $path]);
     exit;
 }
 
-if (!isset($table[$chemin][$methode])) {
+if (!isset($table[$path][$method])) {
     http_response_code(405);
-    render('404', ['chemin' => $chemin]);
+    render('404', ['path' => $path]);
     exit;
 }
 
-[$classe, $action] = $table[$chemin][$methode];
-$controller = $constructeurs[$classe]();
+[$class, $action] = $table[$path][$method];
+$controller = $factories[$class]();
 $controller->$action();

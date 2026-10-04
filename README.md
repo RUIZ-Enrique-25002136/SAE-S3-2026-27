@@ -26,12 +26,12 @@ cp .env.example .env
 ---
 
 ### 3. Utiliser la connexion dans le code PHP
-Pour exécuter vos requêtes SQL, incluez `includes/connnexion_db.php` et appelez `connexion()`. Cette fonction lit le `.env` et renvoie une instance `PDO` :
+Pour exécuter vos requêtes SQL, incluez `includes/database.php` et appelez `getConnection()`. Cette fonction lit le `.env` et renvoie une instance `PDO` :
 
 ```php
-require_once __DIR__ . '/includes/connnexion_db.php';
+require_once __DIR__ . '/includes/database.php';
 
-$pdo = connexion();
+$pdo = getConnection();
 
 // Exemple de requête préparée sécurisée :
 $stmt = $pdo->prepare('SELECT * FROM users WHERE login = :login');

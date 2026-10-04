@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use App\models\UserRepository;
+use App\Models\UserRepository;
 
 class AuthController {
     public function __construct(private UserRepository $users) {}
@@ -14,79 +14,79 @@ class AuthController {
     public function login(): void {
         $email = trim($_POST['email']);
         $password = $_POST['password'] ;
-        $erreurs = [];
+        $errors = [];
         $success = false;
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
-            $erreurs[] = "adresse mail non valide";
+            $errors[] = "adresse mail non valide";
         }
-        if(empty($erreurs)){
+        if(empty($errors)){
             $user = $this->users->findByEmail($email);
-            if ($user != null && $user->verifierMotDePasse($password)){
+            if ($user != null && $user->verifyPassword($password)){
                 $success = true;
                 $_SESSION['email'] = $email;
-                $_SESSION['utilisateur'] = [
+                $_SESSION['user'] = [
                     'id' => $user->id,
                     'email' => $user->email,
                 ];
             } else {
-                $erreurs[] = 'email ou mot de passe incorrect';
+                $errors[] = 'email ou mot de passe incorrect';
             }
         }
-        $this->showLogin($erreurs, $success, $email);
+        $this->showLogin($errors, $success, $email);
     }
 
     private function showLogin(array $errors, bool $success, string $email): void {
         buildHeader();
-        render('login', ['erreurs' => $errors, 'success' => $success, 'email' => $email]);
+        render('login', ['errors' => $errors, 'success' => $success, 'email' => $email]);
         buildFooter();
     }
 
     public function registerForm(): void {
-        $this->showregister([], false, '');
+        $this->showRegister([], false, '');
     }
 
     public function register(): void {
         $email = trim($_POST['email'] );
         $password = $_POST['password'] ;
         $confirmation = $_POST['confirmation'];
-        $erreurs = [];
+        $errors = [];
 
         $success = false;
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $erreurs[] = "Email invalide.";
+            $errors[] = "Email invalide.";
         }
         if (strlen($password) < 8) {
-            $erreurs[] = "Le mot de passe doit contenir au moins 8 caractères.";
+            $errors[] = "Le mot de passe doit contenir au moins 8 caractères.";
         }
         if ($password !== $confirmation) {
-            $erreurs[] = "Les mots de passe ne correspondent pas.";
+            $errors[] = "Les mots de passe ne correspondent pas.";
         }
 
-        if (empty($erreurs)) {
+        if (empty($errors)) {
             if($this->users->emailExists($email)) {
-                $erreurs[] = "Cet email est déjà utilisé.";
+                $errors[] = "Cet email est déjà utilisé.";
             }
             else{
                 $token = bin2hex(random_bytes(32));
-                $res = $this->users->create($email,$password,$token);
-                if($res){
+                $created = $this->users->create($email,$password,$token);
+                if($created){
                     $config = parse_ini_file(__DIR__ . '/../../.env');
                     $siteUrl = $config['SITE_URL'] ?? 'https://beghin.alwaysdata.net';
                     $link = $siteUrl . '/verify?token=' . $token;
                     mail($email, 'Confirme ton email', 'Clique ici : ' . $link);
                     $success = true;}
                 else{
-                    $erreurs[] = "Une erreur est survenue";
+                    $errors[] = "Une erreur est survenue";
                 }
             }
         }
-        $this->showregister($erreurs, $success, $email);
+        $this->showRegister($errors, $success, $email);
     }
 
-    private function showregister(array $erreurs, bool $success, string $email): void {
+    private function showRegister(array $errors, bool $success, string $email): void {
         buildHeader();
-        render('register', ['erreurs' => $erreurs, 'success' => $success,'email'=>$email]);
+        render('register', ['errors' => $errors, 'success' => $success,'email'=>$email]);
         buildFooter();
     }
 

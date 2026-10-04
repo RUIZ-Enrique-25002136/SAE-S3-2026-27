@@ -5,11 +5,11 @@ require_once  __DIR__ . '/../views/partials/header.php';
 require_once  __DIR__ . '/../views/partials/footer.php';
 
 use PDOException;
-use App\models\UserRepository;
+use App\Models\UserRepository;
 
 
 
-class ForgotPasswordController
+class PasswordController
 {
     // intitiallise la variable pdo pour quelle puisse catch les erreur et initiallise l'objet user
     public function __construct(private UserRepository $users) {}
@@ -19,8 +19,8 @@ class ForgotPasswordController
         //load les variables d'environnements
         $config = parse_ini_file(__DIR__ . '/../../.env');
         $siteUrl = $config['SITE_URL'] ?? 'https://beghin.alwaysdata.net';
-        $erreurs = [];
-        $succes = false;
+        $errors = [];
+        $success = false;
 
         // si la page est rejoint depuis un formulaire
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -28,7 +28,7 @@ class ForgotPasswordController
             $email = trim($_POST['email']);
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                $erreurs[] = "L'email n'est pas valide";
+                $errors[] = "L'email n'est pas valide";
             } else {
                 try {
                     //crée un token a partir de 32 bit aléatoire puis le converti en hexadecimal pour être utilisable
@@ -38,23 +38,23 @@ class ForgotPasswordController
                         $link = $siteUrl . '/reset-password?token=' . $token;
                         mail($email, 'Pour réinitialiser ton mot de passe', 'Clique ici : ' . $link);
                     }
-                    $succes = true;
+                    $success = true;
                 } catch (PDOException|\Random\RandomException $e) {
-                    $erreurs[] = 'Une erreur s\'est produite';
+                    $errors[] = 'Une erreur s\'est produite';
                 }
             }
         }
 
         buildHeader();
         //affiche la vue
-        render('forgot_password_view', ['erreurs' => $erreurs, 'succes' => $succes]);
+        render('forgot_password', ['errors' => $errors, 'success' => $success]);
         buildFooter();
     }
 
     public function reset(): void
     {
-        $erreurs = [];
-        $succes = false;
+        $errors = [];
+        $success = false;
         $token = $_POST['token'] ?? $_GET['token'] ?? '';
 
         // si la page est rejoint depuis un formulaire
@@ -63,32 +63,32 @@ class ForgotPasswordController
             $confirmation = $_POST['confirmation'];
 
             if (strlen($password) < 8) {
-                $erreurs[] = 'Le mot de passe doit contenir au moins 8 caractére';
+                $errors[] = 'Le mot de passe doit contenir au moins 8 caractére';
             }
 
             if ($password !== $confirmation) {
-                $erreurs[] = 'Les mots de passe ne correspondent pas';
+                $errors[] = 'Les mots de passe ne correspondent pas';
             }
 
-            if (empty($erreurs)) {
+            if (empty($errors)) {
                 try {
                     if ($this->users->resetPassword($token, $password)) {
-                        $succes = true;
+                        $success = true;
                     } else {
-                        $erreurs[] = 'Lien invalide';
+                        $errors[] = 'Lien invalide';
                     }
                 } catch (PDOException $e) {
-                    $erreurs[] = 'Une erreur s\'est produite';
+                    $errors[] = 'Une erreur s\'est produite';
                 }
             }
         }
 
         // n'est vrais que si le formulaire n'a pas encore été validé et que le token est valide
-        $tokenValide = !$succes && $this->users->tokenExists($token);
+        $isTokenValid = !$success && $this->users->tokenExists($token);
 
         buildHeader();
         // affiche la vue
-        render('reset_password_view', ['erreurs' => $erreurs, 'succes' => $succes, 'tokenValide' => $tokenValide, 'token' => $token]);
+        render('reset_password', ['errors' => $errors, 'success' => $success, 'isTokenValid' => $isTokenValid, 'token' => $token]);
         buildFooter();
     }
 }
