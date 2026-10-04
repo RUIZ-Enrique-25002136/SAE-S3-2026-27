@@ -33,6 +33,7 @@ class AuthController {
                     $success = true;
                     $_SESSION['user'] = [
                         'id' => $user->id,
+                        'email' => $user->email,
                     ];
                 }
             } else {

@@ -9,5 +9,6 @@ function csrfToken(): string
 
 function checkCsrf(): bool
 {
-    return hash_equals($_SESSION['csrf'] ?? '', $_POST['csrf'] ?? '');
+    $token = $_SESSION['csrf'] ?? '';
+    return $token !== '' && hash_equals($token, $_POST['csrf'] ?? '');
 }

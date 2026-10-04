@@ -24,12 +24,13 @@ class PasswordController
 
         // si la page est rejoint depuis un formulaire
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!checkCsrf()) { $errors[] = 'Session expirée, veuillez réessayer.'; }
             // récupére l'email et enléve les espaces inutiles
             $email = trim($_POST['email']);
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors[] = "L'email n'est pas valide";
-            } else {
+            } elseif (empty($errors)) {
                 try {
                     //crée un token a partir de 32 bit aléatoire puis le converti en hexadecimal pour être utilisable
                     $token = bin2hex(random_bytes(32));
@@ -59,6 +60,7 @@ class PasswordController
 
         // si la page est rejoint depuis un formulaire
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (!checkCsrf()) { $errors[] = 'Session expirée, veuillez réessayer.'; }
             $password = $_POST['password'];
             $confirmation = $_POST['confirmation'];
 
