@@ -69,7 +69,7 @@ class AuthController {
      * @return void
      */
     private function showLogin(array $errors, bool $success, string $email): void {
-        buildHeader();
+        buildHeader('Connexion');
         render('login', ['errors' => $errors, 'success' => $success, 'email' => $email]);
         buildFooter();
     }
@@ -117,8 +117,7 @@ class AuthController {
                 $token = bin2hex(random_bytes(32));
                 $created = $this->users->create($email,$password,$token);
                 if($created){
-                    $config = parse_ini_file(__DIR__ . '/../../.env');
-                    $siteUrl = $config['SITE_URL'] ?? 'https://beghin.alwaysdata.net';
+                    $siteUrl = env('SITE_URL', 'https://beghin.alwaysdata.net');
                     $link = $siteUrl . '/verify?token=' . $token;
                     mail($email, 'Confirme ton email', 'Clique ici : ' . $link);
                     $success = true;}
@@ -139,7 +138,7 @@ class AuthController {
      * @return void
      */
     private function showRegister(array $errors, bool $success, string $email): void {
-        buildHeader();
+        buildHeader('Inscription');
         render('register', ['errors' => $errors, 'success' => $success,'email'=>$email]);
         buildFooter();
     }
@@ -165,12 +164,8 @@ class AuthController {
         $token = $_GET['token'] ?? '';
         $success = $token !== '' && $this->users->verifyEmail($token);
 
-        buildHeader();
-        if ($success) {
-            echo '<p>Email vérifié</p><p><a href="/login">Vous connecter ?</a></p>';
-        } else {
-            echo '<p>Lien invalide</p>';
-        }
+        buildHeader('Vérification du compte');
+        render('verify', ['success' => $success]);
         buildFooter();
     }
 }

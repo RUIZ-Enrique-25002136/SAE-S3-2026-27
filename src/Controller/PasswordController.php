@@ -1,13 +1,9 @@
 <?php
 
 namespace App\Controller;
-require_once  __DIR__ . '/../views/partials/header.php';
-require_once  __DIR__ . '/../views/partials/footer.php';
 
 use PDOException;
 use App\Models\UserRepository;
-
-
 
 /**
  * Mot de passe oublié : demande d'un lien par mail, puis choix d'un nouveau mot de passe.
@@ -27,9 +23,7 @@ class PasswordController
      */
     public function forgot(): void
     {
-        //load les variables d'environnements
-        $config = parse_ini_file(__DIR__ . '/../../.env');
-        $siteUrl = $config['SITE_URL'] ?? 'https://beghin.alwaysdata.net';
+        $siteUrl = env('SITE_URL', 'https://beghin.alwaysdata.net');
         $errors = [];
         $success = false;
 
@@ -57,7 +51,7 @@ class PasswordController
             }
         }
 
-        buildHeader();
+        buildHeader('Mot de passe oublié');
         //affiche la vue
         render('forgot_password', ['errors' => $errors, 'success' => $success]);
         buildFooter();
@@ -104,7 +98,7 @@ class PasswordController
         // n'est vrais que si le formulaire n'a pas encore été validé et que le token est valide
         $isTokenValid = !$success && $this->users->tokenExists($token);
 
-        buildHeader();
+        buildHeader('Nouveau mot de passe');
         // affiche la vue
         render('reset_password', ['errors' => $errors, 'success' => $success, 'isTokenValid' => $isTokenValid, 'token' => $token]);
         buildFooter();
