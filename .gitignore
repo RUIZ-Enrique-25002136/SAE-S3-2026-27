@@ -216,7 +216,13 @@ $RECYCLE.BIN/
 # Env
 .env
 
+# Ai
+.ai
+
 # Sujet du projet
 s24-projet.pdf
+
+# Prompts Thimothée
+Prompts_Thimothee.md
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,windows,intellij+all,phpstorm

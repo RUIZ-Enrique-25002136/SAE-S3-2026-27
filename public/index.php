@@ -1,4 +1,7 @@
 <?php
+if (PHP_SAPI == 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)))
+    return false;
+
 $racine = dirname(__DIR__);
 
 require $racine . '/autoload.php';
@@ -10,7 +13,6 @@ require_once $racine . '/src/views/partials/footer.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-$pdo = connexion();
 $routes = require $racine . '/config/routes.php';
 
 $chemin = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';

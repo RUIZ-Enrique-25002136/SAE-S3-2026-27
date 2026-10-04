@@ -23,6 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($erreurs)) {
         $token = bin2hex(random_bytes(32));
+        $pdo = connexion();
         $userRepository = new UserRepository($pdo);
         if($userRepository-> emailExists($email)) {
             $erreurs[] = "Cet email est déjà utilisé.";

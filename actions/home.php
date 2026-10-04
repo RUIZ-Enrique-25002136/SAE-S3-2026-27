@@ -4,6 +4,7 @@ $utilisateur = $_SESSION['utilisateur'] ?? '';
 
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     header('Location: /logout');
+    exit;
 }
 
 $titre = 'Accueil';

@@ -7,7 +7,7 @@
 
 <?php if ($succes): ?>
     Mot de passe réinitialisé
-    <a href="/login.php">Vous Connecter</a>
+    <a href="/login">Vous Connecter</a>
 <?php else: ?>
     <?php foreach ($erreurs as $erreur): ?>
         <ul><li><?= htmlspecialchars($erreur) ?></li></ul>

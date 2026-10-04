@@ -7,7 +7,7 @@
  if ($success) :?>
     <div class="success-message">Connexion réussie. Redirection...</div>
     <meta http-equiv="refresh" content="1;url=index.php">
-    <p><a href="home.php">Cliquez ici si vous n'êtes pas redirigé.</a></p>
+    <p><a href="/">Cliquez ici si vous n'êtes pas redirigé.</a></p>
 
 <?php else : ?>
     <?php if (!empty($erreurs)) : ?>
@@ -26,6 +26,6 @@
         <label for="password">Mot de passe</label><br>
         <input type="password" id="password" name="password" required>
     </p>
-    <a href="forgot_password.php"> Mot de passe oublié ?</a>
+    <a href="/forgot-password"> Mot de passe oublié ?</a>
     <button name="action" type="submit" value = "connexion">Se connecter</button>
 </form>

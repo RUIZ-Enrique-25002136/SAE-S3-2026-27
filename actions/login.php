@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $erreurs[] = "adresse mail non valide";
     }
     if(empty($erreurs)){
+        $pdo = connexion();
             $userRepository = new UserRepository($pdo);
             $user = $userRepository->findByEmail($email);
             if ($user != null && $user->verifierMotDePasse($password)){
