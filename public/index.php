@@ -11,6 +11,7 @@ if (PHP_SAPI == 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_UR
 $root = dirname(__DIR__);
 
 require $root . '/autoload.php';
+require $root . '/includes/env.php';
 require $root . '/includes/render.php';
 require $root . '/includes/database.php';
 require $root . '/includes/csrf.php';
@@ -22,12 +23,11 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $pdo = getConnection();
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 $users = new UserRepository($pdo);
 
 $factories = [
-    HomeController::class           => fn() => new HomeController(),
-    AuthController::class           => fn() => new AuthController($users),
+    HomeController::class     => fn() => new HomeController(),
+    AuthController::class     => fn() => new AuthController($users),
     PasswordController::class => fn() => new PasswordController($users),
 ];
 
@@ -49,7 +49,7 @@ if (!isset($table[$path])) {
 
 if (!isset($table[$path][$method])) {
     http_response_code(405);
-    render('404', ['path' => $path]);
+    render('405', ['path' => $path]);
     exit;
 }
 

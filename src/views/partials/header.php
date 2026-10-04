@@ -7,12 +7,8 @@
  */
 function buildHeader(string $title = 'Accueil') : void
 {
-    if (session_status() === PHP_SESSION_NONE) {
-        session_start();
-    }
-    $user = $_SESSION['user'] ?? null;
-    $currentPath = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
-    $currentPath = rtrim($currentPath, '/') ?: '/';
+    $user = currentUser();
+    $currentPath = currentPath();
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -33,7 +29,7 @@ function buildHeader(string $title = 'Accueil') : void
                 <a href="/login" class="nav-item <?= $currentPath === '/login' ? 'active' : '' ?>">Connexion</a>
                 <a href="/register" class="btn-register <?= $currentPath === '/register' ? 'active' : '' ?>">Inscription</a>
             <?php else: ?>
-                <span class="user-badge"><?= htmlspecialchars($user['email'] ?? 'Connecté') ?></span>
+                <span class="user-badge"><?= htmlspecialchars($user['email']) ?></span>
                 <a href="/logout" class="nav-item nav-logout">Déconnexion</a>
             <?php endif; ?>
         </nav>
