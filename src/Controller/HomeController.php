@@ -24,8 +24,12 @@ class HomeController {
     }
 
     public function sitemap() {
-        $routes = require dirname(__DIR__) . '/config/routes.php';
-        $pages = array_filter($routes, fn(array $route): bool => $route['sitemap']);
+        $pages = [];
+        foreach (require dirname(__DIR__, 2) . '/config/routes.php' as $route) {
+            if ($route[0] === 'GET' && ($route[4] ?? false)) {
+                $pages[$route[1]] = ['title' => $route[3]];
+            }
+        }
 
         buildHeader('Plan du site');
         render('sitemap', ['pages' => $pages]);
