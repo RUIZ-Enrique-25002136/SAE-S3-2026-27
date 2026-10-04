@@ -1,7 +1,7 @@
 
 <?php /**
 * @var bool $success
-* @var string[]   $erreurs
+* @var string[]   $errors
 * @var string     $email
 */
  if ($success) :?>
@@ -10,9 +10,9 @@
     <p><a href="/">Cliquez ici si vous n'êtes pas redirigé.</a></p>
 
 <?php else : ?>
-    <?php if (!empty($erreurs)) : ?>
-        <?php foreach ($erreurs as $erreur): ?>
-             <ul><li> <?= htmlspecialchars($erreur) ?> </li></ul>
+    <?php if (!empty($errors)) : ?>
+        <?php foreach ($errors as $error): ?>
+             <ul><li> <?= htmlspecialchars($error) ?> </li></ul>
         <?php endforeach; ?>
     <?php endif; ?>
 <?php endif ?>

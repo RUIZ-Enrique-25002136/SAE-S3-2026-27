@@ -1,11 +1,11 @@
 <?php
-/** @var array{id: int, email: string}|null $utilisateur */
+/** @var array{id: int, email: string}|null $user */
 ?>
 <div class="card welcome-card">
     <h1>Bienvenue</h1>
 
-    <?php if ($utilisateur !== null): ?>
-        <p class="welcome-text">Bonjour <strong><?= htmlspecialchars($utilisateur['email']) ?></strong>, vous êtes connecté.</p>
+    <?php if ($user !== null): ?>
+        <p class="welcome-text">Bonjour <strong><?= htmlspecialchars($user['email']) ?></strong>, vous êtes connecté.</p>
         <form method= 'post' action = '/logout' class="card-actions">
             <button type="submit" class="btn btn-secondary">Déconnexion</button>
         </form>

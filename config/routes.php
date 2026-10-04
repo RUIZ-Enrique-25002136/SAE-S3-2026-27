@@ -1,7 +1,7 @@
 <?php
 
 use App\Controller\AuthController;
-use App\Controller\ForgotPasswordController;
+use App\Controller\PasswordController;
 use App\Controller\HomeController;
 
 return [
@@ -14,9 +14,9 @@ return [
     ['GET',  '/logout', [AuthController::class, 'logout']],
     ['POST',  '/logout', [AuthController::class, 'logout']],
     ['GET',  '/verify', [AuthController::class, 'verify']],
-    ['GET',  '/forgot-password', [ForgotPasswordController::class, 'forgot'], 'Mot de passe oubliée', true],
-    ['POST', '/forgot-password', [ForgotPasswordController::class, 'forgot']],
-    ['GET',  '/reset-password', [ForgotPasswordController::class, 'reset']],
-    ['POST', '/reset-password', [ForgotPasswordController::class, 'reset']],
+    ['GET',  '/forgot-password', [PasswordController::class, 'forgot'], 'Mot de passe oublié', true],
+    ['POST', '/forgot-password', [PasswordController::class, 'forgot']],
+    ['GET',  '/reset-password', [PasswordController::class, 'reset']],
+    ['POST', '/reset-password', [PasswordController::class, 'reset']],
     ['GET',  '/sitemap', [HomeController::class, 'sitemap'], 'Plan du site', true],
 ];

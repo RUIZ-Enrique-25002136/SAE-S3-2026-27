@@ -18,8 +18,8 @@ class HomeController {
     }
 
     public function legalNotice() {
-        buildHeader('Mention légales');
-        render('legal-notice');
+        buildHeader('Mentions légales');
+        render('legal_notice');
         buildFooter();
     }
 
