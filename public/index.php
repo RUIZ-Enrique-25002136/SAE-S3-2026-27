@@ -30,6 +30,12 @@ $constructeurs = [
     ForgotPasswordController::class => fn() => new ForgotPasswordController($users),
 ];
 
+$table = [];
+foreach (require $racine . '/config/routes.php' as $route) {
+    [$verbe, $url, $handler] = $route;
+    $table[$url][$verbe] = $handler;
+}
+
 $methode = $_SERVER['REQUEST_METHOD'];
 $chemin = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';
 $chemin = rtrim($chemin, '/') ?: '/';
