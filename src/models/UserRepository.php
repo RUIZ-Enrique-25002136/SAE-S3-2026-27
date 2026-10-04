@@ -38,6 +38,7 @@ final class UserRepository
         return new User($ligne['id'], $ligne['email'], $ligne['password']);
     }     // une ligne SQL -> un objet, en un seul endroit
 
+    // rentre le token dans la base de donnée
     public function setToken(string $email, string $token): bool
     {
         $stmt = $this->pdo->prepare("UPDATE users SET verify_token = ? WHERE email = ?");
@@ -45,6 +46,7 @@ final class UserRepository
         return $stmt->rowCount() > 0;
     }
 
+    // vérifie si le token est dans la base de donnée
     public function tokenExists(string $token): bool
     {
         $stmt = $this->pdo->prepare("SELECT id FROM users WHERE verify_token = ?");
@@ -52,6 +54,7 @@ final class UserRepository
         return $stmt->rowCount() > 0;
     }
 
+    // réinitialie le mot de passe dans la base donnée
     public function resetPassword(string $token, string $password): bool
     {
         $stmt = $this->pdo->prepare("UPDATE users SET password = ?, verify_token = NULL WHERE verify_token = ?");
