@@ -14,7 +14,7 @@
     <?php endforeach; ?>
 
     <?php if ($tokenValide): ?>
-        <form method="post" action="/reset_password">
+        <form method="post" action="/reset-password">
             <input type="hidden" name="token" value="<?= htmlspecialchars($token) ?>">
             <p>
                 <label for="password">Nouveau mot de passe</label><br>

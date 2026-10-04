@@ -36,7 +36,7 @@ class ForgotPasswordController
                 try {
                     $token = bin2hex(random_bytes(32));
                     if ($this->users->setToken($email, $token)) {
-                        $link = $siteUrl . '/reset_password?token=' . $token;
+                        $link = $siteUrl . '/reset-password?token=' . $token;
                         mail($email, 'Pour réinitialiser ton mot de passe', 'Clique ici : ' . $link);
                     }
                     $succes = true;

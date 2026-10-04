@@ -5,7 +5,7 @@ return [
     '/register' => 'register',
     '/logout'   => 'logout',
     '/legal-notice' => 'legal-notice',
-    '/forgot_password' => 'forgot-password',
-    '/reset_password' => 'reset-password',
+    '/forgot-password' => 'forgot-password',
+    '/reset-password' => 'reset-password',
     '/verify' => 'verify'
 ];
