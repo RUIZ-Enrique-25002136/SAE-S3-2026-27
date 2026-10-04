@@ -15,6 +15,9 @@ class AuthController {
         $email = trim($_POST['email']);
         $password = $_POST['password'] ;
         $errors = [];
+        if (!checkCsrf()) {
+            $errors[] = 'Session expirée, veuillez réessayer.';
+        }
         $success = false;
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
@@ -22,13 +25,17 @@ class AuthController {
         }
         if(empty($errors)){
             $user = $this->users->findByEmail($email);
-            if ($user != null && $user->verifyPassword($password)){
-                $success = true;
-                $_SESSION['email'] = $email;
-                $_SESSION['user'] = [
-                    'id' => $user->id,
-                    'email' => $user->email,
-                ];
+            if ($user !== null && $user->verifyPassword($password)) {
+                if (!$user->verified) {
+                    $errors[] = 'Veuillez confirmer votre email avant de vous connecter.';
+                } else {
+                    session_regenerate_id(true);
+                    $success = true;
+                    $_SESSION['user'] = [
+                        'id' => $user->id,
+                        'email' => $user->email,
+                    ];
+                }
             } else {
                 $errors[] = 'email ou mot de passe incorrect';
             }
@@ -51,6 +58,9 @@ class AuthController {
         $password = $_POST['password'] ;
         $confirmation = $_POST['confirmation'];
         $errors = [];
+        if (!checkCsrf()) {
+            $errors[] = 'Session expirée, veuillez réessayer.';
+        }
 
         $success = false;
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {

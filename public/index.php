@@ -13,6 +13,7 @@ $root = dirname(__DIR__);
 require $root . '/autoload.php';
 require $root . '/includes/render.php';
 require $root . '/includes/database.php';
+require $root . '/includes/csrf.php';
 require_once $root . '/src/views/partials/header.php';
 require_once $root . '/src/views/partials/footer.php';
 
