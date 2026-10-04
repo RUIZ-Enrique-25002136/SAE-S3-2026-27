@@ -1,4 +1,10 @@
 <?php
+
+use App\Controller\AuthController;
+use App\Controller\ForgotPasswordController;
+use App\Controller\HomeController;
+use App\models\UserRepository;
+
 if (PHP_SAPI == 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)))
     return false;
 
@@ -13,15 +19,39 @@ require_once $racine . '/src/views/partials/footer.php';
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-$routes = require $racine . '/config/routes.php';
 
+$pdo = connexion();
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$users = new UserRepository($pdo);
+
+$constructeurs = [
+    HomeController::class           => fn() => new HomeController(),
+    AuthController::class           => fn() => new AuthController($users),
+    ForgotPasswordController::class => fn() => new ForgotPasswordController($users),
+];
+
+$table = [];
+foreach (require $racine . '/config/routes.php' as $route) {
+    [$verbe, $url, $handler] = $route;
+    $table[$url][$verbe] = $handler;
+}
+
+$methode = $_SERVER['REQUEST_METHOD'];
 $chemin = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';
 $chemin = rtrim($chemin, '/') ?: '/';
 
-if (!isset($routes[$chemin])) {
+if (!isset($table[$chemin])) {
     http_response_code(404);
     render('404', ['chemin' => $chemin]);
     exit;
 }
 
-require $racine . '/actions/' . $routes[$chemin]['action'] . '.php';
+if (!isset($table[$chemin][$methode])) {
+    http_response_code(405);
+    render('404', ['chemin' => $chemin]);
+    exit;
+}
+
+[$classe, $action] = $table[$chemin][$methode];
+$controller = $constructeurs[$classe]();
+$controller->$action();

@@ -1,9 +1,3 @@
-<?php
-
-$titre = 'Mentions légales';
-buildHeader($titre);
-?>
-
 <div class="card mentions-card">
     <h1>Mentions légales</h1>
 
@@ -68,6 +62,3 @@ buildHeader($titre);
     </div>
 </div>
 
-<?php
-buildFooter();
-?>
