@@ -18,6 +18,7 @@ if ($success) :?>
 <?php endif; ?>
 <h1>S'inscrire</h1>
 <form method="post" action="/register">
+    <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrfToken()) ?>">
     <p>
         <label for="email">Email</label><br>
         <input type="email" id="email" name="email" value="<?= htmlspecialchars($email) ?>" required>

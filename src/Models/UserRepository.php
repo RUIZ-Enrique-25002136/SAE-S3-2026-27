@@ -35,7 +35,7 @@ final class UserRepository
     }
 
     private function hydrate(array $row): User {
-        return new User($row['id'], $row['email'], $row['password']);
+        return new User($row['id'], $row['email'], $row['password'], (bool) $row['verified']);
     }     // une ligne SQL -> un objet, en un seul endroit
 
     // rentre le token dans la base de donnée

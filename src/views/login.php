@@ -18,6 +18,7 @@
 <?php endif ?>
 <h1>Connexion</h1>
 <form method="post" action="/login">
+    <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrfToken()) ?>">
     <p>
         <label for="email">Email</label><br>
         <input type="email" id="email" name="email" value="<?= htmlspecialchars($email) ?>" required>
