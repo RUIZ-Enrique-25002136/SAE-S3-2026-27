@@ -1,11 +1,6 @@
 <?php
-require_once 'autoload.php';
 use App\models\UserRepository;
-require_once __DIR__ . '/src/views/partials/header.php';
-require_once __DIR__ . '/src/views/partials/footer.php';
-require_once __DIR__ . '/includes/render.php';
-require_once "includes/connnexion_db.php";
-$config = parse_ini_file(__DIR__ . '/.env');
+$config = parse_ini_file(dirname(__DIR__) . '/.env');
 $siteUrl = $config['SITE_URL'] ?? 'https://beghin.alwaysdata.net';
 
 buildHeader();
@@ -27,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     if (empty($erreurs)) {
-        $pdo = connexion();
         $token = bin2hex(random_bytes(32));
         $userRepository = new UserRepository($pdo);
         if($userRepository-> emailExists($email)) {

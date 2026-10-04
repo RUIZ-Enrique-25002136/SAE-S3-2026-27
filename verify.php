@@ -9,7 +9,7 @@ $stmt->execute([$token]);
 if ($stmt->rowCount() > 0){
     echo <<< HTML
         'Email vérifié'
-        <p><a href="login.php">Vous connecter ?</a></p>
+        <p><a href="/login.php">Vous connecter ?</a></p>
     HTML;
 } else {
     echo 'Lien ivalide';

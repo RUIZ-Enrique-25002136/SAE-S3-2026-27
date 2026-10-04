@@ -7,7 +7,7 @@
  if ($success) :?>
     <div class="success-message">Connexion réussie. Redirection...</div>
     <meta http-equiv="refresh" content="1;url=index.php">
-    <p><a href="index.php">Cliquez ici si vous n'êtes pas redirigé.</a></p>
+    <p><a href="home.php">Cliquez ici si vous n'êtes pas redirigé.</a></p>
 
 <?php else : ?>
     <?php if (!empty($erreurs)) : ?>
@@ -17,7 +17,7 @@
     <?php endif; ?>
 <?php endif ?>
 <h1>Connexion</h1>
-<form method="post" action="login.php">
+<form method="post" action="/login">
     <p>
         <label for="email">Email</label><br>
         <input type="email" id="email" name="email" value="<?= htmlspecialchars($email) ?>" required>
