@@ -24,4 +24,4 @@ if (!isset($routes[$chemin])) {
     exit;
 }
 
-require $racine . '/actions/' . $routes[$chemin] . '.php';
+require $racine . '/actions/' . $routes[$chemin]['action'] . '.php';
