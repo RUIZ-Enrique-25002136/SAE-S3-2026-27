@@ -1,8 +1,8 @@
 <?php
 
 namespace App\controllers;
-require_once  __DIR__ . '/src/views/partials/header.php';
-require_once  __DIR__ . '/src/views/partials/footer.php';
+require_once  __DIR__ . '/../views/partials/header.php';
+require_once  __DIR__ . '/../views/partials/footer.php';
 
 use PDO;
 use PDOException;
@@ -47,7 +47,7 @@ class ForgotPasswordController
         }
 
         buildHeader();
-        require 'src/views/forgot_password_view.php';
+        require __DIR__ . '/../views/forgot_password_view.php';
         buildFooter();
     }
 
@@ -84,7 +84,7 @@ class ForgotPasswordController
         $tokenValide = !$succes && $this->users->tokenExists($token);
 
         buildHeader();
-        require 'src/views/reset_password_view.php';
+        require __DIR__ . '/../views/reset_password_view.php';
         buildFooter();
     }
 }
