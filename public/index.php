@@ -1,8 +1,8 @@
 <?php
 
-use App\controllers\AuthController;
-use App\controllers\ForgotPasswordController;
-use App\controllers\HomeController;
+use App\Controller\AuthController;
+use App\Controller\ForgotPasswordController;
+use App\Controller\HomeController;
 use App\models\UserRepository;
 
 if (PHP_SAPI == 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)))

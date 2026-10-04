@@ -1,5 +1,5 @@
 <?php
-namespace App\controllers;
+namespace App\Controller;
 
 use App\models\UserRepository;
 
