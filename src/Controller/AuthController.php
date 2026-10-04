@@ -4,7 +4,7 @@ namespace App\Controller;
 use App\models\UserRepository;
 
 class AuthController {
-    public function __construct(private UserRepository $user) {}
+    public function __construct(private UserRepository $users) {}
 
     public function loginForm(): void
     {

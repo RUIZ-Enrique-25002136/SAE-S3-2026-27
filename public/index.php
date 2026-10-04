@@ -49,5 +49,5 @@ if (!isset($routes[$chemin][$methode])) {
 }
 
 [$classe, $action] = $routes[$chemin][$methode];
-$controller = $factories[$classe]();
+$controller = $constructeurs[$classe]();
 $controller->$action();

@@ -12,7 +12,7 @@ use App\models\UserRepository;
 class ForgotPasswordController
 {
     // intitiallise la variable pdo pour quelle puisse catch les erreur et initiallise l'objet user
-    public function __construct(PDO $pdo) {}
+    public function __construct(private UserRepository $users) {}
 
     public function forgot(): void
     {
