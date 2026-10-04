@@ -10,6 +10,7 @@ function buildFooter() : void
     <a href = "https://facebook.com"><img class = "reseaux" src="/assets/facebook.svg" alt="Notre page Facebook" ></a>
     <a href = "https://instagram.com"><img class = "reseaux" src="/assets/instagram.svg" alt="Notre page Instagram" ></a><br>
     <a href = "/legal-notice">Notice légale</a>
+    <a href = "/sitemap">Plan du site</a>
     </footer>
 </body>
 </html>
