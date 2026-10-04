@@ -62,7 +62,7 @@ final class UserRepository
         return $stmt->rowCount() > 0;
     }
 
-    public function verifyEmail(string $email): bool
+    public function verifyEmail(string $token): bool
     {
         $stmt = $this->pdo->prepare("UPDATE users SET verified = TRUE, verify_token = NULL WHERE verify_token = ?");
         $stmt->execute([$token]);

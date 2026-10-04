@@ -30,24 +30,32 @@ $constructeurs = [
     ForgotPasswordController::class => fn() => new ForgotPasswordController($users),
 ];
 
-$routes = require $racine . '/config/routes.php';
+$table = [];
+$pages = [];
+foreach (require $racine . '/config/routes.php' as $route) {
+    [$verbe, $url, $handler] = $route;
+    $table[$url][$verbe] = $handler;
+    if ($verbe === 'GET' && isset($route[3])) {
+        $pages[$url] = ['title' => $route[3], 'sitemap' => $route[4] ?? false];
+    }
+}
 
 $methode = $_SERVER['REQUEST_METHOD'];
 $chemin = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';
 $chemin = rtrim($chemin, '/') ?: '/';
 
-if (!isset($routes[$chemin])) {
+if (!isset($table[$chemin])) {
     http_response_code(404);
     render('404', ['chemin' => $chemin]);
     exit;
 }
 
-if (!isset($routes[$chemin][$methode])) {
+if (!isset($table[$chemin][$methode])) {
     http_response_code(405);
     render('404', ['chemin' => $chemin]);
     exit;
 }
 
-[$classe, $action] = $routes[$chemin][$methode];
+[$classe, $action] = $table[$chemin][$methode];
 $controller = $constructeurs[$classe]();
 $controller->$action();

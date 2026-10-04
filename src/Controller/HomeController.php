@@ -4,10 +4,6 @@ namespace App\Controller;
 require_once  __DIR__ . '/../views/partials/header.php';
 require_once  __DIR__ . '/../views/partials/footer.php';
 
-use PDO;
-use PDOException;
-use App\models\UserRepository;
-
 class HomeController {
     public function index() {
         if (isset($_GET['action']) && $_GET['action'] === 'logout') {
@@ -23,7 +19,16 @@ class HomeController {
 
     public function legalNotice() {
         buildHeader('Mention légales');
-        render('legalNotice');
+        render('legal-notice');
+        buildFooter();
+    }
+
+    public function sitemap() {
+        $routes = require dirname(__DIR__) . '/config/routes.php';
+        $pages = array_filter($routes, fn(array $route): bool => $route['sitemap']);
+
+        buildHeader('Plan du site');
+        render('sitemap', ['pages' => $pages]);
         buildFooter();
     }
 }
