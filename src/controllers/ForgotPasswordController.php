@@ -4,7 +4,6 @@ namespace App\controllers;
 require_once  __DIR__ . '/../views/partials/header.php';
 require_once  __DIR__ . '/../views/partials/footer.php';
 
-use PDO;
 use PDOException;
 use App\models\UserRepository;
 
@@ -12,14 +11,8 @@ use App\models\UserRepository;
 
 class ForgotPasswordController
 {
-    private UserRepository $users;
-
     // intitiallise la variable pdo pour quelle puisse catch les erreur et initiallise l'objet user
-    public function __construct(PDO $pdo)
-    {
-        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->users = new UserRepository($pdo);
-    }
+    public function __construct(PDO $pdo) {}
 
     public function forgot(): void
     {
@@ -54,7 +47,7 @@ class ForgotPasswordController
 
         buildHeader();
         //affiche la vue
-        require __DIR__ . '/../views/forgot_password_view.php';
+        render('forgotPassword', ['erreurs' => $erreurs, 'succes' => $succes]);
         buildFooter();
     }
 
@@ -95,7 +88,7 @@ class ForgotPasswordController
 
         buildHeader();
         // affiche la vue
-        require __DIR__ . '/../views/reset_password_view.php';
+        render('resetPassword', ['erreurs' => $erreurs, 'succes' => $succes, 'tokenValide' => $tokenValide, 'token' => $token]);
         buildFooter();
     }
 }

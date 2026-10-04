@@ -61,4 +61,11 @@ final class UserRepository
         $stmt->execute([password_hash($password, PASSWORD_DEFAULT), $token]);
         return $stmt->rowCount() > 0;
     }
+
+    public function verifyEmail(string $email): bool
+    {
+        $stmt = $this->pdo->prepare("UPDATE users SET verified = TRUE, verify_token = NULL WHERE verify_token = ?");
+        $stmt->execute([$token]);
+        return $stmt->rowCount() > 0;
+    }
 }
