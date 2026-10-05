@@ -19,17 +19,33 @@ final class Router
      */
     public function dispatch(Request $request): Response
     {
+        $allowedMethods = [];
+
         foreach ($this->routes as [$method, $path, [$class, $action]]) {
-            if ($method === $request->getMethod() && $path === $request->getPath()) {
+            if ($path !== $request->getPath()) {
+                continue;
+            }
+
+            if ($method === $request->getMethod()) {
                 $controller = ($this->factories[$class])();
 
                 return $controller->$action($request);
             }
+
+            $allowedMethods[] = $method;   // le chemin existe, mais pas pour cette méthode
+        }
+
+        if ($allowedMethods !== []) {
+            return $this->view
+                ->render('405', [
+                    'title' => 'Méthode non autorisée',
+                    'path'  => $request->getPath(),
+                ], 405)
+                ->withHeader('Allow', implode(', ', array_unique($allowedMethods)));
         }
 
         return $this->view->render('404', [
             'title' => 'Page introuvable',
             'path'  => $request->getPath(),
         ], 404);
-    }
-}
+    }}

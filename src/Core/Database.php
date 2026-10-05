@@ -12,7 +12,7 @@ final class Database
      *
      * @return PDO Connexion configurée (exceptions, tableaux associatifs, vraies requêtes préparées)
      */
-    public static function connexion(string $racine): PDO
+    public static function connexion(): PDO
     {
         if (!extension_loaded('pdo_mysql')) {
             die("Erreur configuration : l'extension PHP pdo_mysql n'est pas activée.");
