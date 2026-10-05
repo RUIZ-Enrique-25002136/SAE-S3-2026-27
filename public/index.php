@@ -4,25 +4,22 @@ use App\Controller\AuthController;
 use App\Controller\PasswordController;
 use App\Controller\HomeController;
 use App\Models\UserRepository;
+use App\Core\Database;
+use App\Core\Env;
+use App\Core\View;
 
 if (PHP_SAPI == 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)))
     return false;
 
 $root = dirname(__DIR__);
-
+$view = new View($root . '/src/views');
 require $root . '/autoload.php';
-require $root . '/includes/env.php';
-require $root . '/includes/render.php';
-require $root . '/includes/database.php';
-require $root . '/includes/csrf.php';
-require_once $root . '/src/views/partials/header.php';
-require_once $root . '/src/views/partials/footer.php';
-
+$router = new Router($routes, $factories, $view);
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-$pdo = getConnection();
+$pdo = Database::connexion($root);
 $users = new UserRepository($pdo);
 
 $factories = [
