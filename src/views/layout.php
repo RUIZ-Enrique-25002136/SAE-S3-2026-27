@@ -1,15 +1,3 @@
-<?php
-/**
- * Affiche le début de la page : <head>, menu de navigation et ouverture de <main>.
- *
- * @param string $title Titre de la page, affiché dans l'onglet
- * @return void
- */
-function buildHeader(string $title = 'Accueil') : void
-{
-    $user = currentUser();
-    $currentPath = currentPath();
-?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -36,6 +24,16 @@ function buildHeader(string $title = 'Accueil') : void
     </div>
 </header>
 <main class="main-content">
-<?php
-}
-?>
+    <?=$content?>
+</main>
+
+    <footer class="site-footer">
+    <p> Nos réseaux :</p>
+    <a href = "https://x.com"><img class = "reseaux" src="/assets/x.svg" alt="Notre page X" ></a>
+    <a href = "https://facebook.com"><img class = "reseaux" src="/assets/facebook.svg" alt="Notre page Facebook" ></a>
+    <a href = "https://instagram.com"><img class = "reseaux" src="/assets/instagram.svg" alt="Notre page Instagram" ></a><br>
+    <a href = "/legal-notice">Notice légale</a>
+    <a href = "/sitemap">Plan du site</a>
+    </footer>
+</body>
+</html>

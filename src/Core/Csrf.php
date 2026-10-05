@@ -1,4 +1,7 @@
 <?php
+
+namespace App\Core;
+final class Csrf{
 /**
  * Renvoie le jeton CSRF de la session, et le crée au premier appel.
  *
@@ -21,5 +24,4 @@ function csrfToken(): string
 function checkCsrf(): bool
 {
     $token = $_SESSION['csrf'] ?? '';
-    return $token !== '' && hash_equals($token, $_POST['csrf'] ?? '');
-}
+    return $token !== '' && hash_equals($token, $_POST['csrf'] ?? '');}}
