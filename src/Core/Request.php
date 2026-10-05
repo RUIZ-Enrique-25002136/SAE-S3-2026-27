@@ -3,58 +3,77 @@
 namespace App\Core;
 
 /**
- * Représente la réponse HTTP envoyée au client par un contrôleur.
+ * Représente la requête HTTP reçue par l'application.
  */
-class Response
+class Request
 {
     /**
-     * @param string                $content    Corps de la réponse (ex. HTML)
-     * @param int                   $statusCode Code de statut HTTP (200, 302, 404...)
-     * @param array<string, string> $headers    En-têtes HTTP (ex. Location)
+     * @param array<string, mixed> $get    Données de l'URL ($_GET)
+     * @param array<string, mixed> $post   Données du formulaire ($_POST)
+     * @param array<string, mixed> $server Données de l'environnement ($_SERVER)
      */
     public function __construct(
-        private string $content = '',
-        private int $statusCode = 200,
-        private array $headers = []
+        private array $get = [],
+        private array $post = [],
+        private array $server = []
     ) {}
 
     /**
-     * Raccourci pour créer une redirection HTTP.
+     * Crée une requête à partir des superglobales PHP actuelles.
      */
-    public static function redirect(string $url, int $statusCode = 302): self
+    public static function createFromGlobals(): self
     {
-        return new self('', $statusCode, ['Location' => $url]);
-    }
-
-    public function getContent(): string
-    {
-        return $this->content;
-    }
-
-    public function getStatusCode(): int
-    {
-        return $this->statusCode;
+        return new self($_GET, $_POST, $_SERVER);
     }
 
     /**
-     * @return array<string, string>
+     * Renvoie la méthode HTTP (ex. GET, POST).
      */
-    public function getHeaders(): array
+    public function getMethod(): string
     {
-        return $this->headers;
+        $method = $this->server['REQUEST_METHOD'] ?? 'GET';
+        return is_string($method) ? strtoupper($method) : 'GET';
     }
 
     /**
-     * Envoie les en-têtes HTTP et le corps au navigateur.
+     * Indique si la méthode est POST.
      */
-    public function send(): void
+    public function isPost(): bool
     {
-        http_response_code($this->statusCode);
+        return $this->getMethod() === 'POST';
+    }
 
-        foreach ($this->headers as $name => $value) {
-            header("$name: $value");
-        }
+    /**
+     * Renvoie le chemin demandé dans l'URL (ex. /login), sans paramètres ni slash final.
+     */
+    public function getPath(): string
+    {
+        $uri = $this->server['REQUEST_URI'] ?? '/';
+        $path = parse_url(is_string($uri) ? $uri : '/', PHP_URL_PATH);
+        return rtrim(is_string($path) ? $path : '/', '/') ?: '/';
+    }
 
-        echo $this->content;
+    /**
+     * Récupère une valeur envoyée en POST ou GET, ou la valeur par défaut.
+     */
+    public function get(string $key, mixed $default = null): mixed
+    {
+        return $this->post[$key] ?? $this->get[$key] ?? $default;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getPost(): array
+    {
+        return $this->post;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function getQuery(): array
+    {
+        return $this->get;
     }
 }
