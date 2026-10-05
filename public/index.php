@@ -37,22 +37,27 @@ foreach (require $root . '/config/routes.php' as $route) {
     $table[$url][$verb] = $handler;
 }
 
-$method = $_SERVER['REQUEST_METHOD'];
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH) ?: '/';
-$path = rtrim($path, '/') ?: '/';
+use App\Core\Request;
+use App\Core\Response;
+
+$request = Request::createFromGlobals();
+$method = $request->getMethod();
+$path = $request->getPath();
 
 if (!isset($table[$path])) {
-    http_response_code(404);
-    render('404', ['path' => $path]);
+    $response = new Response(render('404', ['path' => $path]), 404);
+    $response->send();
     exit;
 }
 
 if (!isset($table[$path][$method])) {
-    http_response_code(405);
-    render('405', ['path' => $path]);
+    $response = new Response(render('405', ['path' => $path]), 405);
+    $response->send();
     exit;
 }
 
 [$class, $action] = $table[$path][$method];
 $controller = $factories[$class]();
-$controller->$action();
+
+$response = $controller->$action($request);
+$response->send();
