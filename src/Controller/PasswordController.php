@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use PDOException;
 use App\Models\UserRepository;
+use App\Core\Request;
+use App\Core\Response;
 
 /**
  * Mot de passe oublié : demande d'un lien par mail, puis choix d'un nouveau mot de passe.
@@ -19,27 +21,27 @@ class PasswordController
      * Affiche et traite le formulaire « mot de passe oublié » (GET et POST /forgot-password).
      * Le même message est affiché que l'email existe ou non, pour ne pas révéler les comptes.
      *
-     * @return void
+     * @param Request $request
+     * @return Response
      */
-    public function forgot(): void
+    public function forgot(Request $request): Response
     {
         $siteUrl = env('SITE_URL', 'https://beghin.alwaysdata.net');
         $errors = [];
         $success = false;
 
-        // si la page est rejoint depuis un formulaire
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!checkCsrf()) { $errors[] = 'Session expirée, veuillez réessayer.'; }
-            // récupére l'email et enléve les espaces inutiles
-            $email = trim($_POST['email']);
+        // Si le formulaire a été soumis
+        if ($request->isPost()) {
+            if (!checkCsrf()) {
+                $errors[] = 'Session expirée, veuillez réessayer.';
+            }
+            $email = trim((string) $request->get('email', ''));
 
             if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
                 $errors[] = "L'email n'est pas valide";
             } elseif (empty($errors)) {
                 try {
-                    //crée un token a partir de 32 bit aléatoire puis le converti en hexadecimal pour être utilisable
                     $token = bin2hex(random_bytes(32));
-                    //si le token est bien rentrée dans la table envoie un lien vers la pages de reset_password avec le token dans l'URL
                     if ($this->users->setToken($email, $token)) {
                         $link = $siteUrl . '/reset-password?token=' . $token;
                         mail($email, 'Pour réinitialiser ton mot de passe', 'Clique ici : ' . $link);
@@ -51,28 +53,30 @@ class PasswordController
             }
         }
 
-        buildHeader('Mot de passe oublié');
-        //affiche la vue
-        render('forgot_password', ['errors' => $errors, 'success' => $success]);
-        buildFooter();
+        $html = render('forgot_password', ['errors' => $errors, 'success' => $success], 'Mot de passe oublié');
+        return new Response($html);
     }
 
     /**
      * Affiche et traite le formulaire de nouveau mot de passe (GET et POST /reset-password).
      *
-     * @return void
+     * @param Request $request
+     * @return Response
      */
-    public function reset(): void
+    public function reset(Request $request): Response
     {
         $errors = [];
         $success = false;
-        $token = $_POST['token'] ?? $_GET['token'] ?? '';
 
-        // si la page est rejoint depuis un formulaire
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!checkCsrf()) { $errors[] = 'Session expirée, veuillez réessayer.'; }
-            $password = $_POST['password'];
-            $confirmation = $_POST['confirmation'];
+        $token = (string) $request->get('token', '');
+
+        if ($request->isPost()) {
+            if (!checkCsrf()) {
+                $errors[] = 'Session expirée, veuillez réessayer.';
+            }
+
+            $password = (string) $request->get('password', '');
+            $confirmation = (string) $request->get('confirmation', '');
 
             if (strlen($password) < 8) {
                 $errors[] = 'Le mot de passe doit contenir au moins 8 caractére';
@@ -94,13 +98,14 @@ class PasswordController
                 }
             }
         }
-
-        // n'est vrais que si le formulaire n'a pas encore été validé et que le token est valide
         $isTokenValid = !$success && $this->users->tokenExists($token);
+        $html = render('reset_password', [
+            'errors'       => $errors,
+            'success'      => $success,
+            'isTokenValid' => $isTokenValid,
+            'token'        => $token,
+        ], 'Nouveau mot de passe');
 
-        buildHeader('Nouveau mot de passe');
-        // affiche la vue
-        render('reset_password', ['errors' => $errors, 'success' => $success, 'isTokenValid' => $isTokenValid, 'token' => $token]);
-        buildFooter();
+        return new Response($html);
     }
 }

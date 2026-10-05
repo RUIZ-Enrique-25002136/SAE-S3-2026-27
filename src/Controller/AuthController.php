@@ -1,7 +1,10 @@
 <?php
+
 namespace App\Controller;
 
 use App\Models\UserRepository;
+use App\Core\Request;
+use App\Core\Response;
 
 /**
  * Inscription, connexion, déconnexion et confirmation de l'adresse email.
@@ -15,32 +18,36 @@ class AuthController {
     /**
      * Affiche le formulaire de connexion (GET /login).
      *
-     * @return void
+     * @param Request $request
+     * @return Response
      */
-    public function loginForm(): void
+    public function loginForm(Request $request): Response
     {
-        $this->showLogin([], false, '');
+        return new Response($this->showLogin([], false, ''));
     }
 
     /**
      * Traite le formulaire de connexion (POST /login) : jeton CSRF, email, mot de passe
      * et compte vérifié, puis ouvre la session avec un nouvel identifiant.
      *
-     * @return void
+     * @param Request $request
+     * @return Response
      */
-    public function login(): void {
-        $email = trim($_POST['email']);
-        $password = $_POST['password'] ;
+    public function login(Request $request): Response {
+        $email = trim((string) $request->get('email', ''));
+        $password = (string) $request->get('password', '');
         $errors = [];
+
         if (!checkCsrf()) {
             $errors[] = 'Session expirée, veuillez réessayer.';
         }
         $success = false;
 
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = "adresse mail non valide";
         }
-        if(empty($errors)){
+
+        if (empty($errors)) {
             $user = $this->users->findByEmail($email);
             if ($user !== null && $user->verifyPassword($password)) {
                 if (!$user->verified) {
@@ -57,43 +64,49 @@ class AuthController {
                 $errors[] = 'email ou mot de passe incorrect';
             }
         }
-        $this->showLogin($errors, $success, $email);
+
+        return new Response($this->showLogin($errors, $success, $email));
     }
 
     /**
-     * Affiche la page de connexion.
+     * Prépare le HTML de la page de connexion.
      *
      * @param string[] $errors  Messages d'erreur à afficher
      * @param bool     $success true si la connexion a réussi
      * @param string   $email   Email à pré-remplir dans le formulaire
-     * @return void
+     * @return string
      */
-    private function showLogin(array $errors, bool $success, string $email): void {
-        buildHeader('Connexion');
-        render('login', ['errors' => $errors, 'success' => $success, 'email' => $email]);
-        buildFooter();
+    private function showLogin(array $errors, bool $success, string $email): string {
+        return render('login', [
+            'errors'  => $errors,
+            'success' => $success,
+            'email'   => $email,
+        ], 'Connexion');
     }
 
     /**
      * Affiche le formulaire d'inscription (GET /register).
      *
-     * @return void
+     * @param Request $request
+     * @return Response
      */
-    public function registerForm(): void {
-        $this->showRegister([], false, '');
+    public function registerForm(Request $request): Response {
+        return new Response($this->showRegister([], false, ''));
     }
 
     /**
      * Traite le formulaire d'inscription (POST /register) : crée le compte
      * et envoie le lien de confirmation par mail.
      *
-     * @return void
+     * @param Request $request
+     * @return Response
      */
-    public function register(): void {
-        $email = trim($_POST['email'] );
-        $password = $_POST['password'] ;
-        $confirmation = $_POST['confirmation'];
+    public function register(Request $request): Response {
+        $email = trim((string) $request->get('email', ''));
+        $password = (string) $request->get('password', '');
+        $confirmation = (string) $request->get('confirmation', '');
         $errors = [];
+
         if (!checkCsrf()) {
             $errors[] = 'Session expirée, veuillez réessayer.';
         }
@@ -110,62 +123,64 @@ class AuthController {
         }
 
         if (empty($errors)) {
-            if($this->users->emailExists($email)) {
+            if ($this->users->emailExists($email)) {
                 $errors[] = "Cet email est déjà utilisé.";
-            }
-            else{
+            } else {
                 $token = bin2hex(random_bytes(32));
-                $created = $this->users->create($email,$password,$token);
-                if($created){
+                $created = $this->users->create($email, $password, $token);
+                if ($created) {
                     $siteUrl = env('SITE_URL', 'https://beghin.alwaysdata.net');
                     $link = $siteUrl . '/verify?token=' . $token;
                     mail($email, 'Confirme ton email', 'Clique ici : ' . $link);
-                    $success = true;}
-                else{
+                    $success = true;
+                } else {
                     $errors[] = "Une erreur est survenue";
                 }
             }
         }
-        $this->showRegister($errors, $success, $email);
+
+        return new Response($this->showRegister($errors, $success, $email));
     }
 
     /**
-     * Affiche la page d'inscription.
+     * Prépare le HTML de la page d'inscription.
      *
      * @param string[] $errors  Messages d'erreur à afficher
      * @param bool     $success true si le compte a été créé
      * @param string   $email   Email à pré-remplir dans le formulaire
-     * @return void
+     * @return string
      */
-    private function showRegister(array $errors, bool $success, string $email): void {
-        buildHeader('Inscription');
-        render('register', ['errors' => $errors, 'success' => $success,'email'=>$email]);
-        buildFooter();
+    private function showRegister(array $errors, bool $success, string $email): string {
+        return render('register', [
+            'errors'  => $errors,
+            'success' => $success,
+            'email'   => $email,
+        ], 'Inscription');
     }
 
     /**
      * Ferme la session puis redirige vers l'accueil (GET ou POST /logout).
      *
-     * @return void
+     * @param Request $request
+     * @return Response
      */
-    public function logout(): void {
+    public function logout(Request $request): Response {
         $_SESSION = [];
         session_destroy();
-        header('Location: /');
-        exit;
+        return Response::redirect('/');
     }
 
     /**
      * Confirme l'adresse email à partir du jeton du lien (GET /verify?token=...).
      *
-     * @return void
+     * @param Request $request
+     * @return Response
      */
-    public function verify(): void {
-        $token = $_GET['token'] ?? '';
+    public function verify(Request $request): Response {
+        $token = (string) $request->get('token', '');
         $success = $token !== '' && $this->users->verifyEmail($token);
 
-        buildHeader('Vérification du compte');
-        render('verify', ['success' => $success]);
-        buildFooter();
+        $html = render('verify', ['success' => $success], 'Vérification du compte');
+        return new Response($html);
     }
 }
