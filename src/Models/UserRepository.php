@@ -40,18 +40,30 @@ final class UserRepository
         return $query->fetchColumn() !== false;
     }
     /**
+     * Indique si un login est déjà utilisé par un compte.
+     *
+     * @param string $login Login à tester
+     * @return bool true si un compte utilise déjà ce login
+     */
+    public function loginExists(string $login): bool {
+        $query = $this->pdo->prepare('SELECT 1 FROM `users` WHERE `login` = :login LIMIT 1');
+        $query->execute(['login' => $login]);
+        return $query->fetchColumn() !== false;
+    }
+    /**
      * Crée un compte non vérifié avec son jeton de vérification d'email.
      *
      * @param string $email         Adresse email du compte
+     * @param string $login         Login affiché aux autres membres
      * @param string $plainPassword Mot de passe en clair, haché avant l'enregistrement
      * @param string $token         Jeton envoyé par mail pour confirmer l'adresse
      * @return bool true si le compte a été créé
      */
-    public  function create(string $email, string $plainPassword,string $token): bool {
+    public  function create(string $email, string $login, string $plainPassword,string $token): bool {
         $passwordHash = password_hash($plainPassword, PASSWORD_DEFAULT);
-        $query = $this->pdo->prepare('INSERT INTO `users` (`email`, `password`,`verify_token`) VALUES (:email, :password ,:token)');
+        $query = $this->pdo->prepare('INSERT INTO `users` (`email`, `login`, `password`,`verify_token`) VALUES (:email, :login, :password ,:token)');
         try{
-           return $query->execute(['email' => $email, 'password' => $passwordHash, 'token' => $token]);
+           return $query->execute(['email' => $email, 'login' => $login, 'password' => $passwordHash, 'token' => $token]);
         }
         catch(PDOException $e){
             return false;
