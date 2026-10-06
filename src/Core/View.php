@@ -1,18 +1,19 @@
 <?php
-namespace App\Core;
-use App\Core\Response;
-class View {
 
+namespace App\Core;
+
+class View
+{
     public function __construct(
         private string $dossier,
         private array $partage = [],
     ) {}
 
-    public function render(string $vue, array $donnees = [], int $statut = 200): Response
+    public function render(string $view, array $donnees = [], int $statut = 200): Response
     {
         $donnees += $this->partage;
 
-        $content = $this->capture($vue . '.php', $donnees);
+        $content = $this->capture($view . '.php', $donnees);
         $html = $this->capture('layout.php', $donnees + ['content' => $content]);
 
         return new Response($statut, $html);

@@ -7,18 +7,22 @@ use App\Models\UserRepository;
 use App\Core\Database;
 use App\Core\Env;
 use App\Core\View;
+use App\Core\Router;
 
 if (PHP_SAPI == 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)))
     return false;
 
 $root = dirname(__DIR__);
-$view = new View($root . '/src/views');
 require $root . '/autoload.php';
+Env::charger($root . '/.env');
+session_start();
+$pdo = Database::connexion();          // sans $root maintenant
+$users = new UserRepository($pdo);
+$view = new View($root . '/src/views', [/* user, currentPath */]);
+$factories = [];                  // avec $view pour les contrôleurs
+$routes = require $root . '/config/routes.php';
 $router = new Router($routes, $factories, $view);
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
+$router->dispatch(Request::createFromGlobals())->send();
 $pdo = Database::connexion($root);
 $users = new UserRepository($pdo);
 
@@ -53,8 +57,3 @@ if (!isset($table[$path][$method])) {
     exit;
 }
 
-[$class, $action] = $table[$path][$method];
-$controller = $factories[$class]();
-
-$response = $controller->$action($request);
-$response->send();
