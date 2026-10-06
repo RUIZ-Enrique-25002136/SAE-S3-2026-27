@@ -1,5 +1,6 @@
 <?php
 
+use App\Controller\AccountController;
 use App\Controller\AuthController;
 use App\Controller\PasswordController;
 use App\Controller\HomeController;
@@ -32,6 +33,7 @@ $factories = [
     HomeController::class     => fn() => new HomeController($view),
     AuthController::class     => fn() => new AuthController($users, $view),
     PasswordController::class => fn() => new PasswordController($users, $view),
+    AccountController::class  => fn() => new AccountController($users, $view),
 ];
 $router = new Router(require $root . '/config/routes.php', $factories, $view);
 $router->dispatch($request)->send();

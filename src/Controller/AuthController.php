@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Models\User;
 use App\Models\UserRepository;
 use App\Core\Request;
 use App\Core\Response;
@@ -115,7 +116,7 @@ class AuthController
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = 'Email invalide.';
         }
-        if (!preg_match('/^[A-Za-z0-9_-]{3,30}$/', $login)) {
+        if (!User::isValidLogin($login)) {
             $errors[] = 'Le login doit contenir entre 3 et 30 caractères : lettres, chiffres, - ou _.';
         }
         if (strlen($password) < 8) {
