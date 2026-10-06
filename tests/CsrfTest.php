@@ -14,7 +14,7 @@ final class CsrfTest extends TestCase
     {
         $token = Csrf::token();
         $this->assertSame(64, strlen($token));
-        $this->assertSame($token, csrfToken());
+        $this->assertSame($token, Csrf::token());
         $this->assertSame($token, $_SESSION['csrf']);
     }
 
@@ -40,6 +40,6 @@ final class CsrfTest extends TestCase
     public function testAcceptsCorrectToken(): void
     {
         $_POST['csrf'] = Csrf::token();
-        $this->assertTrue(Csrf::token());
+        $this->assertTrue(Csrf::check());
     }
 }
