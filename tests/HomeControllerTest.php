@@ -8,7 +8,7 @@ final class HomeControllerTest extends TestCase
 {
     public function testIndexReturnsOkResponseWithWelcomeHtml(): void
     {
-        $controller = new HomeController();
+        $controller = new HomeController(new \App\Core\View(dirname(__DIR__) . '/src/views', ['user' => null, 'currentPath' => '/']));
         $request = new Request([], [], ['REQUEST_METHOD' => 'GET', 'REQUEST_URI' => '/']);
 
         $response = $controller->index($request);
@@ -19,7 +19,8 @@ final class HomeControllerTest extends TestCase
 
     public function testLegalNoticeReturnsOkResponse(): void
     {
-        $controller = new HomeController();
+        $controller = new HomeController(new \App\Core\View(dirname(__DIR__) . '/src/views', ['user' => null, 'currentPath' => '/']));
+
         $request = new Request([], [], ['REQUEST_METHOD' => 'GET', 'REQUEST_URI' => '/legal-notice']);
 
         $response = $controller->legalNotice($request);

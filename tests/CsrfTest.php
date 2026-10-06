@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-
+use App\Core\Csrf;
 final class CsrfTest extends TestCase
 {
     protected function setUp(): void
@@ -12,34 +12,34 @@ final class CsrfTest extends TestCase
 
     public function testTokenIsCreatedOnceAndReused(): void
     {
-        $token = csrfToken();
+        $token = Csrf::token();
         $this->assertSame(64, strlen($token));
-        $this->assertSame($token, csrfToken());
+        $this->assertSame($token, Csrf::token());
         $this->assertSame($token, $_SESSION['csrf']);
     }
 
     public function testRejectsWhenSessionHasNoToken(): void
     {
-        $this->assertFalse(checkCsrf());
+        $this->assertFalse(Csrf::check());
     }
 
     public function testRejectsEmptyTokenOnBothSides(): void
     {
         $_SESSION['csrf'] = '';
         $_POST['csrf'] = '';
-        $this->assertFalse(checkCsrf());
+        $this->assertFalse(Csrf::check());
     }
 
     public function testRejectsWrongToken(): void
     {
-        csrfToken();
+        Csrf::token();
         $_POST['csrf'] = 'faux';
-        $this->assertFalse(checkCsrf());
+        $this->assertFalse(Csrf::check());
     }
 
     public function testAcceptsCorrectToken(): void
     {
-        $_POST['csrf'] = csrfToken();
-        $this->assertTrue(checkCsrf());
+        $_POST['csrf'] = Csrf::token();
+        $this->assertTrue(Csrf::check());
     }
 }

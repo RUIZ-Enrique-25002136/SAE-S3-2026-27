@@ -4,60 +4,37 @@ use App\Controller\AuthController;
 use App\Controller\PasswordController;
 use App\Controller\HomeController;
 use App\Models\UserRepository;
+use App\Core\Database;
+use App\Core\Env;
+use App\Core\View;
+use App\Core\Router;
+use App\Core\Request;
 
-if (PHP_SAPI == 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)))
+
+if (PHP_SAPI == 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))) {
     return false;
+}
 
 $root = dirname(__DIR__);
-
 require $root . '/autoload.php';
-require $root . '/includes/env.php';
-require $root . '/includes/render.php';
-require $root . '/includes/database.php';
-require $root . '/includes/csrf.php';
-require_once $root . '/src/views/partials/header.php';
-require_once $root . '/src/views/partials/footer.php';
-
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
-
-$pdo = getConnection();
-$users = new UserRepository($pdo);
-
-$factories = [
-    HomeController::class     => fn() => new HomeController(),
-    AuthController::class     => fn() => new AuthController($users),
-    PasswordController::class => fn() => new PasswordController($users),
-];
-
-$table = [];
-foreach (require $root . '/config/routes.php' as $route) {
-    [$verb, $url, $handler] = $route;
-    $table[$url][$verb] = $handler;
-}
-
-use App\Core\Request;
-use App\Core\Response;
+Env::charger($root . '/.env');
+session_start();
 
 $request = Request::createFromGlobals();
-$method = $request->getMethod();
-$path = $request->getPath();
+$users = new UserRepository(Database::connexion());
+$view = new View($root . '/src/views', [
+    'user'        => $_SESSION['user'] ?? null,
+    'currentPath' => $request->getPath(),
+]);
 
-if (!isset($table[$path])) {
-    $response = new Response(render('404', ['path' => $path]), 404);
-    $response->send();
-    exit;
-}
 
-if (!isset($table[$path][$method])) {
-    $response = new Response(render('405', ['path' => $path]), 405);
-    $response->send();
-    exit;
-}
+$factories = [
+    HomeController::class     => fn() => new HomeController($view),
+    AuthController::class     => fn() => new AuthController($users, $view),
+    PasswordController::class => fn() => new PasswordController($users, $view),
+];
+$router = new Router(require $root . '/config/routes.php', $factories, $view);
+$router->dispatch($request)->send();
 
-[$class, $action] = $table[$path][$method];
-$controller = $factories[$class]();
 
-$response = $controller->$action($request);
-$response->send();
+

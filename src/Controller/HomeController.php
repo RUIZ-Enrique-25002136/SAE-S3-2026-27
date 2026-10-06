@@ -4,29 +4,24 @@ namespace App\Controller;
 
 use App\Core\Request;
 use App\Core\Response;
+use App\Core\View;
 
-/**
- * Pages publiques : accueil, mentions légales et plan du site.
- */
-class HomeController {
-    /**
-     * Affiche la page d'accueil (GET /).
-     */
-    public function index(Request $request): Response {
-        return new Response(render('home', [], 'Accueil'));
+class HomeController
+{
+
+    public function __construct(private View $view) {}
+    public function index(Request $request): Response
+    {
+        return $this->view->render('home', ['title' => 'Accueil']);
     }
 
-    /**
-     * Affiche les mentions légales (GET /legal-notice).
-     */
-    public function legalNotice(Request $request): Response {
-        return new Response(render('legal_notice', [], 'Mentions légales'));
+    public function legalNotice(Request $request): Response
+    {
+        return $this->view->render('legal_notice', ['title' => 'Mentions légales']);
     }
 
-    /**
-     * Affiche le plan du site, généré à partir des routes GET marquées comme visibles.
-     */
-    public function sitemap(Request $request): Response {
+    public function sitemap(Request $request): Response
+    {
         $pages = [];
         foreach (require dirname(__DIR__, 2) . '/config/routes.php' as $route) {
             if ($route[0] === 'GET' && ($route[4] ?? false)) {
@@ -34,7 +29,9 @@ class HomeController {
             }
         }
 
-        return new Response(render('sitemap', ['pages' => $pages], 'Plan du site'));
+        return $this->view->render('sitemap', [
+            'pages' => $pages,
+            'title' => 'Plan du site',
+        ]);
     }
 }
-      

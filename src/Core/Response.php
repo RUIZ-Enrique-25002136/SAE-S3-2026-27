@@ -17,7 +17,13 @@
             private int $statusCode = 200,
             private array $headers = []
         ) {}
+        public function withHeader(string $name, string $value): self
+        {
+            $clone = clone $this;
+            $clone->headers[$name] = $value;
 
+            return $clone;
+        }
         /**
          * Raccourci pour créer une redirection HTTP.
          */

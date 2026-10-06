@@ -4,6 +4,7 @@
 * @var string[]   $errors
 * @var string     $email
 */
+use App\Core\Csrf;
  if ($success) :?>
     <div class="success-message">Connexion réussie. Redirection...</div>
     <meta http-equiv="refresh" content="1;url=/">
@@ -18,7 +19,7 @@
 <?php endif ?>
 <h1>Connexion</h1>
 <form method="post" action="/login">
-    <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrfToken()) ?>">
+    <input type="hidden" name="csrf" value="<?= htmlspecialchars(Csrf::token()) ?>">
     <p>
         <label for="email">Email</label><br>
         <input type="email" id="email" name="email" value="<?= htmlspecialchars($email) ?>" required>

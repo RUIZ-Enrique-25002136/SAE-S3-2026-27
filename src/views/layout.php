@@ -1,14 +1,11 @@
-<?php
-/**
- * Affiche le début de la page : <head>, menu de navigation et ouverture de <main>.
- *
- * @param string $title Titre de la page, affiché dans l'onglet
- * @return void
- */
-function buildHeader(string $title = 'Accueil') : void
-{
-    $user = currentUser();
-    $currentPath = currentPath();
+<?php /**
+* Variables attendues par le layout.
+*
+* @var string     $content     HTML de la page, fourni par View::render()
+* @var string     $title       Titre de la page
+* @var string     $currentPath Chemin de la page courante
+* @var array|null $user        Utilisateur connecté (id, email) ou null
+*/
 ?>
 <!DOCTYPE html>
 <html lang="fr">
@@ -36,6 +33,16 @@ function buildHeader(string $title = 'Accueil') : void
     </div>
 </header>
 <main class="main-content">
-<?php
-}
-?>
+    <?=$content?>
+</main>
+
+    <footer class="site-footer">
+    <p> Nos réseaux :</p>
+    <a href = "https://x.com"><img class = "reseaux" src="/assets/x.svg" alt="Notre page X" ></a>
+    <a href = "https://facebook.com"><img class = "reseaux" src="/assets/facebook.svg" alt="Notre page Facebook" ></a>
+    <a href = "https://instagram.com"><img class = "reseaux" src="/assets/instagram.svg" alt="Notre page Instagram" ></a><br>
+    <a href = "/legal-notice">Notice légale</a>
+    <a href = "/sitemap">Plan du site</a>
+    </footer>
+</body>
+</html>
