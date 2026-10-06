@@ -1,6 +1,17 @@
+<?php
+/**
+ * @var string $title
+ * @var array{id: int, email: string}|null $user
+ * @var string $currentPath
+ * @var string|null $path
+ */
 
-<div class="card">
-    <h1>405 - Méthode non autorisée</h1>
-    <p>La page <code><?= htmlspecialchars($path ?? '') ?></code> existe, mais pas pour ce type de requête.</p>
-    <a href="/" class="btn btn-primary">Retour à l'accueil</a>
-</div>
+use App\View\Layout;
+use App\View\Link;
+use App\View\Paragraph;
+use App\View\Strong;
+
+return new Layout($title, $user, [
+        new Paragraph(['La page ', new Strong($path ?? ''), " existe, mais pas pour ce type de requête."]),
+        new Link("Retour a l'acceuil", '/', 'btn btn-primary'),
+], $currentPath);

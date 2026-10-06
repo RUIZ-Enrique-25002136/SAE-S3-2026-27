@@ -58,7 +58,7 @@ final class Layout extends Component
 
     private function renderNav(): string
     {
-        $current = parse_url($currentPath ?? '/', PHP_URL_PATH);
+        $current = $this->currentPath;
 
         if ($this->user === null) {
             $links = $this->link('/', 'Accueil', 'nav-item', $current)
