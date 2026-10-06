@@ -1,13 +1,7 @@
 <?php
 
-use App\Controller\AuthController;
-use App\Controller\PasswordController;
-use App\Controller\HomeController;
-use App\Models\UserRepository;
-use App\Core\Database;
-use App\Core\Env;
-use App\Core\View;
-use App\Core\Router;
+require "../../autoload.php";
+
 
 if (PHP_SAPI == 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)))
     return false;
@@ -23,7 +17,7 @@ $factories = [];
 $routes = require $root . '/config/routes.php';
 $router = new Router($routes, $factories, $view);
 $router->dispatch(Request::createFromGlobals())->send();
-$pdo = Database::connexion($root);
+$pdo = Database::connexion();
 $users = new UserRepository($pdo);
 
 $factories = [
@@ -38,8 +32,6 @@ foreach (require $root . '/config/routes.php' as $route) {
     $table[$url][$verb] = $handler;
 }
 
-use App\Core\Request;
-use App\Core\Response;
 
 $request = Request::createFromGlobals();
 $method = $request->getMethod();
