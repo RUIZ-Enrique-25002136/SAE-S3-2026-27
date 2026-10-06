@@ -3,6 +3,7 @@
 /** @var string[] $errors */
 /** @var bool $isTokenValid */
 /** @var string $token */
+use App\Core\Csrf;
 ?>
 
 <?php if ($success): ?>
@@ -15,7 +16,7 @@
 
     <?php if ($isTokenValid): ?>
         <form method="post" action="/reset-password">
-            <input type="hidden" name="csrf" value="<?= htmlspecialchars(csrfToken()) ?>">
+            <input type="hidden" name="csrf" value="<?= htmlspecialchars(Csrf::token()) ?>">
             <input type="hidden" name="token" value="<?= htmlspecialchars($token) ?>">
             <p>
                 <label for="password">Nouveau mot de passe</label><br>

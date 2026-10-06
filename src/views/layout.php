@@ -1,5 +1,12 @@
-
-
+<?php /**
+* Variables attendues par le layout.
+*
+* @var string     $content     HTML de la page, fourni par View::render()
+* @var string     $title       Titre de la page
+* @var string     $currentPath Chemin de la page courante
+* @var array|null $user        Utilisateur connecté (id, email) ou null
+*/
+?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>

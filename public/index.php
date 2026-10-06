@@ -16,10 +16,10 @@ $root = dirname(__DIR__);
 require $root . '/autoload.php';
 Env::charger($root . '/.env');
 session_start();
-$pdo = Database::connexion();          // sans $root maintenant
+$pdo = Database::connexion();
 $users = new UserRepository($pdo);
 $view = new View($root . '/src/views', [/* user, currentPath */]);
-$factories = [];                  // avec $view pour les contrôleurs
+$factories = [];
 $routes = require $root . '/config/routes.php';
 $router = new Router($routes, $factories, $view);
 $router->dispatch(Request::createFromGlobals())->send();
@@ -27,9 +27,9 @@ $pdo = Database::connexion($root);
 $users = new UserRepository($pdo);
 
 $factories = [
-    HomeController::class     => fn() => new HomeController(),
-    AuthController::class     => fn() => new AuthController($users),
-    PasswordController::class => fn() => new PasswordController($users),
+    HomeController::class     => new HomeController(),
+    AuthController::class     => new AuthController($users, $view),
+    PasswordController::class => new PasswordController($users,$view),
 ];
 
 $table = [];
@@ -46,13 +46,13 @@ $method = $request->getMethod();
 $path = $request->getPath();
 
 if (!isset($table[$path])) {
-    $response = new Response(render('404', ['path' => $path]), 404);
+    $response = new Response($this->render('404', ['path' => $path]), 404);
     $response->send();
     exit;
 }
 
 if (!isset($table[$path][$method])) {
-    $response = new Response(render('405', ['path' => $path]), 405);
+    $response = new Response($this->render('405', ['path' => $path]), 405);
     $response->send();
     exit;
 }
