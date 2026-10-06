@@ -28,14 +28,13 @@ $view = new View($root . '/src/views', [
     'currentPath' => $request->getPath(),
 ]);
 
+
 $factories = [
     HomeController::class     => fn() => new HomeController($view),
     AuthController::class     => fn() => new AuthController($users, $view),
     PasswordController::class => fn() => new PasswordController($users, $view),
 ];
-
 $router = new Router(require $root . '/config/routes.php', $factories, $view);
-$router->dispatch($request)->send();
 
 $table = [];
 foreach (require $root . '/config/routes.php' as $route) {
@@ -45,8 +44,7 @@ foreach (require $root . '/config/routes.php' as $route) {
 
 
 $request = Request::createFromGlobals();
-$method = $request->getMethod();
-$path = $request->getPath();
+$router->dispatch($request)->send();
 
 
 

@@ -8,8 +8,8 @@ use App\Core\View;
 
 class HomeController
 {
-    private View $view;
 
+    public function __construct(private View $view) {}
     public function index(Request $request): Response
     {
         return $this->view->render('home', ['title' => 'Accueil']);
