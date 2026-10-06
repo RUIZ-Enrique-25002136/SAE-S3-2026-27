@@ -8,11 +8,7 @@ use App\Core\View;
 
 class HomeController
 {
-
-    public function __construct(private View $view)
-    {
-        $this->view = new View(dirname(__DIR__, 2) . '/templates');
-    }
+    private View $view;
 
     public function index(Request $request): Response
     {
