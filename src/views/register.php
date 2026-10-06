@@ -3,6 +3,7 @@
  * @var bool $success
  * @var string[]   $errors
  * @var string     $email
+ * @var string     $login
  */
 use App\Core\Csrf;
 if ($success) :?>
@@ -22,6 +23,10 @@ if ($success) :?>
     <p>
         <label for="email">Email</label><br>
         <input type="email" id="email" name="email" value="<?= htmlspecialchars($email) ?>" required>
+    </p>
+    <p>
+        <label for="login">Login</label><br>
+        <input type="text" id="login" name="login" value="<?= htmlspecialchars($login) ?>" minlength="3" maxlength="30" pattern="[A-Za-z0-9_\-]{3,30}" required>
     </p>
     <p>
         <label for="password">Mot de passe</label><br>
