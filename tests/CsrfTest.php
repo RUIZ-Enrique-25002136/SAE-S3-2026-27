@@ -1,7 +1,7 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
-use app\core\Csrf;
+use App\Core\Csrf;
 final class CsrfTest extends TestCase
 {
     protected function setUp(): void
@@ -32,7 +32,7 @@ final class CsrfTest extends TestCase
 
     public function testRejectsWrongToken(): void
     {
-        csrfToken();
+        Csrf::token();
         $_POST['csrf'] = 'faux';
         $this->assertFalse(Csrf::check());
     }
