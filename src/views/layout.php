@@ -27,6 +27,7 @@
                 <a href="/register" class="btn-register <?= $currentPath === '/register' ? 'active' : '' ?>">Inscription</a>
             <?php else: ?>
                 <span class="user-badge"><?= htmlspecialchars($user['email']) ?></span>
+                <a href="/account" class="nav-item <?= $currentPath === '/account' ? 'active' : '' ?>">Mon compte</a>
                 <a href="/logout" class="nav-item nav-logout">Déconnexion</a>
             <?php endif; ?>
         </nav>

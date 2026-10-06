@@ -28,6 +28,53 @@ final class UserRepository
         }
         return $this->hydrate($row);
     }  // null si absent
+
+    /**
+     * Cherche un utilisateur par son identifiant.
+     *
+     * @param int $id Identifiant du compte
+     * @return User|null L'utilisateur trouvé, ou null s'il n'existe pas
+     */
+    public function findById(int $id): ?User
+    {
+        $query = $this->pdo->prepare('SELECT * FROM `users` WHERE `id` = :id LIMIT 1');
+        $query->execute(['id' => $id]);
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+        if (!$row) {
+            return null;
+        }
+        return $this->hydrate($row);
+    }
+
+    /**
+     * Remplace le login d'un compte.
+     *
+     * @param int    $id    Identifiant du compte
+     * @param string $login Nouveau login, déjà validé
+     * @return bool true si le login a été enregistré
+     */
+    public function updateLogin(int $id, string $login): bool
+    {
+        $query = $this->pdo->prepare('UPDATE `users` SET `login` = :login WHERE `id` = :id');
+        try {
+            return $query->execute(['login' => $login, 'id' => $id]);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Supprime définitivement un compte.
+     *
+     * @param int $id Identifiant du compte
+     * @return bool true si un compte a été supprimé
+     */
+    public function delete(int $id): bool
+    {
+        $query = $this->pdo->prepare('DELETE FROM `users` WHERE `id` = :id');
+        $query->execute(['id' => $id]);
+        return $query->rowCount() > 0;
+    }
     /**
      * Indique si une adresse email est déjà utilisée par un compte.
      *
@@ -78,7 +125,7 @@ final class UserRepository
      * @return User
      */
     private function hydrate(array $row): User {
-        return new User($row['id'], $row['email'], $row['password'], (bool) $row['verified']);
+        return new User($row['id'], $row['email'], $row['password'], (bool) $row['verified'], $row['login'], $row['created_at']);
     }     // une ligne SQL -> un objet, en un seul endroit
 
     /**
