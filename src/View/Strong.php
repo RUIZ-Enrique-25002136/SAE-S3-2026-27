@@ -9,6 +9,6 @@ final class Strong extends Component
     ){}
     public function render(): string
     {
-        return '<strong>' . htmlspecialchars($this->text) . '</strong>';
+        return '<strong>' . $this->e($this->text) . '</strong>';
     }
 }

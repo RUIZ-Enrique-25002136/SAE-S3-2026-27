@@ -11,9 +11,7 @@ final class Paragraph extends Component
     public function render(): string
     {
         $html = '';
-        foreach ($this->children as $child) {
-            $html .= $child instanceof Component ? $child->render() : htmlspecialchars($child);
-        }
+        $this.$this->renderAll($this->children);
         return '<p>' . $html . '</p>';
     }
 }

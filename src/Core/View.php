@@ -2,6 +2,8 @@
 
 namespace App\Core;
 
+use App\View\Layout;
+
 class View
 {
     public function __construct(
@@ -13,18 +15,13 @@ class View
     {
         $donnees += $this->partage;
 
-        $content = $this->capture($view . '.php', $donnees);
-        $html = $this->capture('layout.php', $donnees + ['content' => $content]);
 
-        return new Response($html, $statut);
+        return new Response($this->capture($view . '.php', $donnees)->render(), $statut);
     }
 
     private function capture(string $fichier, array $donnees): string
     {
         extract($donnees, EXTR_SKIP);
-        ob_start();
-        require $this->dossier . '/' . $fichier;
-
-        return ob_get_clean();
+        return require $this->dossier . '/' . $fichier;
     }
 }
