@@ -5,15 +5,15 @@ namespace App\View;
 final class Paragraph extends Component
 {
     public function __construct(
-        public readonly string $text,
+        public array $children = [],
     ){
     }
     public function render(): string
     {
-        $text = $this->e($this->text);
-
-        return <<<HTML
-            <p>{$text}</p>
-            HTML;
+        $html = '';
+        foreach ($this->children as $child) {
+            $html .= $child instanceof Component ? $child->render() : htmlspecialchars($child);
+        }
+        return '<p>' . $html . '</p>';
     }
 }

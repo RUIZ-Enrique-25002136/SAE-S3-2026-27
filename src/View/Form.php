@@ -2,6 +2,8 @@
 
 namespace App\View;
 
+use App\Core\Csrf;
+
 final class Form extends Component
 {
     public function __construct(
@@ -9,13 +11,18 @@ final class Form extends Component
         private readonly string $action
     ){
     }
-    public function render(): string
+    public function render(array $enfants = []): string
     {
-        $method = e($this->method);
-        $action = e($this->action);
+        $method  = $this->e($this->method);
+        $action  = $this->e($this->action);
+        $contenu = $this->renderAll($enfants);
+        $token   = $this->e(Csrf::token());
 
         return <<<HTML
-            <form method="{$method}" action="{$action}"></form>
+            <form method="{$method}" action="{$action}">
+                <input type="hidden" name="csrf_token" value="{$token}">
+                {$contenu}
+            </form>
             HTML;
     }
 }
