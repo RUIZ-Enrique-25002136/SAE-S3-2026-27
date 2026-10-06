@@ -46,15 +46,5 @@ $request = Request::createFromGlobals();
 $method = $request->getMethod();
 $path = $request->getPath();
 
-if (!isset($table[$path])) {
-    $response = new Response($this->render('404', ['path' => $path]), 404);
-    $response->send();
-    exit;
-}
 
-if (!isset($table[$path][$method])) {
-    $response = new Response($this->render('405', ['path' => $path]), 405);
-    $response->send();
-    exit;
-}
 

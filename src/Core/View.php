@@ -16,7 +16,7 @@ class View
         $content = $this->capture($view . '.php', $donnees);
         $html = $this->capture('layout.php', $donnees + ['content' => $content]);
 
-        return new Response($statut, $html);
+        return new Response($html, $statut);
     }
 
     private function capture(string $fichier, array $donnees): string

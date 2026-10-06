@@ -8,9 +8,8 @@ use App\Core\View;
 
 class HomeController
 {
-    private View $view;
 
-    public function __construct()
+    public function __construct(private View $view)
     {
         $this->view = new View(dirname(__DIR__, 2) . '/templates');
     }
