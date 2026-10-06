@@ -19,7 +19,7 @@ final class HomeControllerTest extends TestCase
 
     public function testLegalNoticeReturnsOkResponse(): void
     {
-        $controller = $controller = new HomeController(new \App\Core\View(dirname(__DIR__) . '/src/views', ['user' => null, 'currentPath' => '/']));
+        $controller = new HomeController(new \App\Core\View(dirname(__DIR__) . '/src/views', ['user' => null, 'currentPath' => '/']));
 
         $request = new Request([], [], ['REQUEST_METHOD' => 'GET', 'REQUEST_URI' => '/legal-notice']);
 

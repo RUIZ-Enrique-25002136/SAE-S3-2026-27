@@ -9,7 +9,6 @@ use App\Core\Env;
 use App\Core\View;
 use App\Core\Router;
 use App\Core\Request;
-use App\Core\Response;
 
 
 if (PHP_SAPI == 'cli-server' && is_file(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH))) {
@@ -35,12 +34,6 @@ $factories = [
     PasswordController::class => fn() => new PasswordController($users, $view),
 ];
 $router = new Router(require $root . '/config/routes.php', $factories, $view);
-
-$table = [];
-foreach (require $root . '/config/routes.php' as $route) {
-    [$verb, $url, $handler] = $route;
-    $table[$url][$verb] = $handler;
-}
 $router->dispatch($request)->send();
 
 

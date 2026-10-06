@@ -9,7 +9,7 @@ use PDOException;
 final class UserRepository
 {
     /**
-     * @param PDO $pdo Connexion à la base, obtenue avec getConnection()
+     * @param PDO $pdo Connexion à la base, obtenue avec connection()
      */
     public function __construct(private readonly PDO $pdo) {}
 
