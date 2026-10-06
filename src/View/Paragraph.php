@@ -11,7 +11,7 @@ final class Paragraph extends Component
     public function render(): string
     {
         $html = '';
-        $this.$this->renderAll($this->children);
+        $html = $this->renderAll($this->children);
         return '<p>' . $html . '</p>';
     }
 }

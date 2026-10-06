@@ -2,6 +2,7 @@
 
 namespace App\Core;
 
+use App\View\Component;
 use App\View\Layout;
 
 class View
@@ -19,6 +20,7 @@ class View
         return new Response($this->capture($view . '.php', $donnees)->render(), $statut);
     }
 
+    /** @return Component */
     private function capture(string $fichier, array $donnees): string
     {
         extract($donnees, EXTR_SKIP);

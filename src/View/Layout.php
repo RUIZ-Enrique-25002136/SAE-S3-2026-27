@@ -12,6 +12,7 @@ final class Layout extends Component
         private readonly string $title,
         private readonly ?array $user,
         private readonly array $children,
+        private readonly string $currentPath,
     ) {
     }
 
@@ -39,7 +40,6 @@ final class Layout extends Component
                 </div>
             </header>
             <main class="main-content">
-                <h1>{$title}</h1>
                 {$content}
             </main>
             <footer class="site-footer">
@@ -58,7 +58,7 @@ final class Layout extends Component
 
     private function renderNav(): string
     {
-        $current = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+        $current = parse_url($currentPath ?? '/', PHP_URL_PATH);
 
         if ($this->user === null) {
             $links = $this->link('/', 'Accueil', 'nav-item', $current)

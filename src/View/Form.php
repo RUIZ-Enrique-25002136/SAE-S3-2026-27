@@ -9,14 +9,14 @@ final class Form extends Component
     public function __construct(
         private readonly string $method,
         private readonly string $action,
-        private readonly array $enfants = [],
+        private readonly array $children = [],
     ){
     }
     public function render(): string
     {
         $method  = $this->e($this->method);
         $action  = $this->e($this->action);
-        $contenu = $this->renderAll($this->enfants);
+        $contenu = $this->renderAll($this->children);
         $token   = $this->e(Csrf::token());
 
         return <<<HTML
