@@ -4,6 +4,7 @@ use App\Controller\AccountController;
 use App\Controller\AuthController;
 use App\Controller\PasswordController;
 use App\Controller\HomeController;
+use App\Controller\MemberController;
 
 return [
     ['GET',  '/', [HomeController::class, 'index'], 'Accueil', true],
@@ -22,5 +23,6 @@ return [
     ['GET',  '/account', [AccountController::class, 'show'], 'Mon compte', true],
     ['POST', '/account', [AccountController::class, 'updateLogin']],
     ['POST', '/account/delete', [AccountController::class, 'delete']],
+    ['GET',  '/members', [MemberController::class, 'index'], 'Membres', true],
     ['GET',  '/sitemap', [HomeController::class, 'sitemap'], 'Plan du site', true],
 ];

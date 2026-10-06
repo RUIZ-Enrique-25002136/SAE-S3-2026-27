@@ -4,6 +4,7 @@ use App\Controller\AccountController;
 use App\Controller\AuthController;
 use App\Controller\PasswordController;
 use App\Controller\HomeController;
+use App\Controller\MemberController;
 use App\Models\UserRepository;
 use App\Core\Database;
 use App\Core\Env;
@@ -34,6 +35,7 @@ $factories = [
     AuthController::class     => fn() => new AuthController($users, $view),
     PasswordController::class => fn() => new PasswordController($users, $view),
     AccountController::class  => fn() => new AccountController($users, $view),
+    MemberController::class   => fn() => new MemberController($users, $view),
 ];
 $router = new Router(require $root . '/config/routes.php', $factories, $view);
 $router->dispatch($request)->send();

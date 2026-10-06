@@ -47,6 +47,33 @@ final class UserRepository
     }
 
     /**
+     * Renvoie une page de la liste des membres vérifiés, du plus récent au plus ancien.
+     *
+     * @param int $limit  Nombre de membres par page
+     * @param int $offset Nombre de membres à sauter (pages précédentes)
+     * @return User[]
+     */
+    public function findPage(int $limit, int $offset): array
+    {
+        $query = $this->pdo->prepare('SELECT * FROM `users` WHERE `verified` = TRUE ORDER BY `created_at` DESC, `id` DESC LIMIT :limit OFFSET :offset');
+        $query->bindValue('limit', $limit, PDO::PARAM_INT);
+        $query->bindValue('offset', $offset, PDO::PARAM_INT);
+        $query->execute();
+
+        return array_map(fn(array $row) => $this->hydrate($row), $query->fetchAll(PDO::FETCH_ASSOC));
+    }
+
+    /**
+     * Compte les membres vérifiés, pour calculer le nombre de pages.
+     *
+     * @return int Nombre de membres vérifiés
+     */
+    public function countMembers(): int
+    {
+        return (int) $this->pdo->query('SELECT COUNT(*) FROM `users` WHERE `verified` = TRUE')->fetchColumn();
+    }
+
+    /**
      * Remplace le login d'un compte.
      *
      * @param int    $id    Identifiant du compte
