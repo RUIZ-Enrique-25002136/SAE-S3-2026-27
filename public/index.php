@@ -41,9 +41,6 @@ foreach (require $root . '/config/routes.php' as $route) {
     [$verb, $url, $handler] = $route;
     $table[$url][$verb] = $handler;
 }
-
-
-$request = Request::createFromGlobals();
 $router->dispatch($request)->send();
 
 
