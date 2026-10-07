@@ -25,7 +25,7 @@ if ($success) :?>
         <input type="email" id="email" name="email" value="<?= htmlspecialchars($email) ?>" required>
     </p>
     <p>
-        <label for="login">Login</label><br>
+        <label for="login">Pseudo</label><br>
         <input type="text" id="login" name="login" value="<?= htmlspecialchars($login) ?>" minlength="3" maxlength="30" pattern="[A-Za-z0-9_\-]{3,30}" required>
     </p>
     <p>
