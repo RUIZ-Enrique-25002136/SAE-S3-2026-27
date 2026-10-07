@@ -85,6 +85,8 @@ class AuthController
             'success' => $success,
             'email'   => $email,
             'title'   => 'Connexion',
+            'description' => 'Connectez-vous à votre compte SAE S3 pour accéder à votre espace.',
+
         ]);
     }
 
@@ -155,6 +157,7 @@ class AuthController
             'success' => $success,
             'email'   => $email,
             'title'   => 'Inscription',
+            'description' => 'Créez votre compte SAE S3 en quelques secondes.',
         ]);
     }
 
@@ -179,6 +182,7 @@ class AuthController
         return $this->view->render('verify', [
             'success' => $success,
             'title'   => 'Vérification du compte',
+            'noindex' => true,
         ]);
     }
 }
