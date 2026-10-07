@@ -1,8 +1,10 @@
 <?php
 
+use App\Controller\AccountController;
 use App\Controller\AuthController;
 use App\Controller\PasswordController;
 use App\Controller\HomeController;
+use App\Controller\MemberController;
 
 return [
     ['GET',  '/', [HomeController::class, 'index'], 'Accueil', true],
@@ -18,5 +20,9 @@ return [
     ['POST', '/forgot-password', [PasswordController::class, 'forgot']],
     ['GET',  '/reset-password', [PasswordController::class, 'reset']],
     ['POST', '/reset-password', [PasswordController::class, 'reset']],
+    ['GET',  '/account', [AccountController::class, 'show'], 'Mon compte', true],
+    ['POST', '/account', [AccountController::class, 'updateLogin']],
+    ['POST', '/account/delete', [AccountController::class, 'delete']],
+    ['GET',  '/members', [MemberController::class, 'index'], 'Membres', true],
     ['GET',  '/sitemap', [HomeController::class, 'sitemap'], 'Plan du site', true],
 ];

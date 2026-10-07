@@ -28,6 +28,80 @@ final class UserRepository
         }
         return $this->hydrate($row);
     }  // null si absent
+
+    /**
+     * Cherche un utilisateur par son identifiant.
+     *
+     * @param int $id Identifiant du compte
+     * @return User|null L'utilisateur trouvé, ou null s'il n'existe pas
+     */
+    public function findById(int $id): ?User
+    {
+        $query = $this->pdo->prepare('SELECT * FROM `users` WHERE `id` = :id LIMIT 1');
+        $query->execute(['id' => $id]);
+        $row = $query->fetch(PDO::FETCH_ASSOC);
+        if (!$row) {
+            return null;
+        }
+        return $this->hydrate($row);
+    }
+
+    /**
+     * Renvoie une page de la liste des membres vérifiés, du plus récent au plus ancien.
+     *
+     * @param int $limit  Nombre de membres par page
+     * @param int $offset Nombre de membres à sauter (pages précédentes)
+     * @return User[]
+     */
+    public function findPage(int $limit, int $offset): array
+    {
+        $query = $this->pdo->prepare('SELECT * FROM `users` WHERE `verified` = TRUE ORDER BY `created_at` DESC, `id` DESC LIMIT :limit OFFSET :offset');
+        $query->bindValue('limit', $limit, PDO::PARAM_INT);
+        $query->bindValue('offset', $offset, PDO::PARAM_INT);
+        $query->execute();
+
+        return array_map(fn(array $row) => $this->hydrate($row), $query->fetchAll(PDO::FETCH_ASSOC));
+    }
+
+    /**
+     * Compte les membres vérifiés, pour calculer le nombre de pages.
+     *
+     * @return int Nombre de membres vérifiés
+     */
+    public function countMembers(): int
+    {
+        return (int) $this->pdo->query('SELECT COUNT(*) FROM `users` WHERE `verified` = TRUE')->fetchColumn();
+    }
+
+    /**
+     * Remplace le login d'un compte.
+     *
+     * @param int    $id    Identifiant du compte
+     * @param string $login Nouveau login, déjà validé
+     * @return bool true si le login a été enregistré
+     */
+    public function updateLogin(int $id, string $login): bool
+    {
+        $query = $this->pdo->prepare('UPDATE `users` SET `login` = :login WHERE `id` = :id');
+        try {
+            return $query->execute(['login' => $login, 'id' => $id]);
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Supprime définitivement un compte.
+     *
+     * @param int $id Identifiant du compte
+     * @return bool true si un compte a été supprimé
+     */
+    public function delete(int $id): bool
+    {
+        $query = $this->pdo->prepare('DELETE FROM `users` WHERE `id` = :id');
+        $query->execute(['id' => $id]);
+        return $query->rowCount() > 0;
+    }
     /**
      * Indique si une adresse email est déjà utilisée par un compte.
      *
@@ -40,18 +114,30 @@ final class UserRepository
         return $query->fetchColumn() !== false;
     }
     /**
+     * Indique si un login est déjà utilisé par un compte.
+     *
+     * @param string $login Login à tester
+     * @return bool true si un compte utilise déjà ce login
+     */
+    public function loginExists(string $login): bool {
+        $query = $this->pdo->prepare('SELECT 1 FROM `users` WHERE `login` = :login LIMIT 1');
+        $query->execute(['login' => $login]);
+        return $query->fetchColumn() !== false;
+    }
+    /**
      * Crée un compte non vérifié avec son jeton de vérification d'email.
      *
      * @param string $email         Adresse email du compte
+     * @param string $login         Login affiché aux autres membres
      * @param string $plainPassword Mot de passe en clair, haché avant l'enregistrement
      * @param string $token         Jeton envoyé par mail pour confirmer l'adresse
      * @return bool true si le compte a été créé
      */
-    public  function create(string $email, string $plainPassword,string $token): bool {
+    public  function create(string $email, string $login, string $plainPassword,string $token): bool {
         $passwordHash = password_hash($plainPassword, PASSWORD_DEFAULT);
-        $query = $this->pdo->prepare('INSERT INTO `users` (`email`, `password`,`verify_token`) VALUES (:email, :password ,:token)');
+        $query = $this->pdo->prepare('INSERT INTO `users` (`email`, `login`, `password`,`verify_token`) VALUES (:email, :login, :password ,:token)');
         try{
-           return $query->execute(['email' => $email, 'password' => $passwordHash, 'token' => $token]);
+           return $query->execute(['email' => $email, 'login' => $login, 'password' => $passwordHash, 'token' => $token]);
         }
         catch(PDOException $e){
             return false;
@@ -66,7 +152,7 @@ final class UserRepository
      * @return User
      */
     private function hydrate(array $row): User {
-        return new User($row['id'], $row['email'], $row['password'], (bool) $row['verified']);
+        return new User($row['id'], $row['email'], $row['password'], (bool) $row['verified'], $row['login'], $row['created_at']);
     }     // une ligne SQL -> un objet, en un seul endroit
 
     /**

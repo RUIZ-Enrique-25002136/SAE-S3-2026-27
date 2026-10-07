@@ -1,8 +1,10 @@
 <?php
 
+use App\Controller\AccountController;
 use App\Controller\AuthController;
 use App\Controller\PasswordController;
 use App\Controller\HomeController;
+use App\Controller\MemberController;
 use App\Models\UserRepository;
 use App\Core\Database;
 use App\Core\Env;

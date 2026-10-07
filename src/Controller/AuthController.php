@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Models\User;
 use App\Models\UserRepository;
 use App\Core\Request;
 use App\Core\Response;
@@ -95,7 +96,7 @@ class AuthController
      */
     public function registerForm(Request $request): Response
     {
-        return $this->showRegister([], false, '');
+        return $this->showRegister([], false, '', '');
     }
 
     /**
@@ -105,6 +106,7 @@ class AuthController
     public function register(Request $request): Response
     {
         $email = trim((string) $request->get('email', ''));
+        $login = trim((string) $request->get('login', ''));
         $password = (string) $request->get('password', '');
         $confirmation = (string) $request->get('confirmation', '');
         $errors = [];
@@ -126,9 +128,11 @@ class AuthController
         if (empty($errors)) {
             if ($this->users->emailExists($email)) {
                 $errors[] = 'Cet email est déjà utilisé.';
+            } elseif ($this->users->loginExists($login)) {
+                $errors[] = 'Ce login est déjà utilisé.';
             } else {
                 $token = bin2hex(random_bytes(32));
-                $created = $this->users->create($email, $password, $token);
+                $created = $this->users->create($email, $login, $password, $token);
                 if ($created) {
                     $siteUrl = Env::get('SITE_URL', 'https://beghin.alwaysdata.net');
                     $link = $siteUrl . '/verify?token=' . $token;
@@ -140,7 +144,7 @@ class AuthController
             }
         }
 
-        return $this->showRegister($errors, $success, $email);
+        return $this->showRegister($errors, $success, $email, $login);
     }
 
     /**
@@ -149,15 +153,16 @@ class AuthController
      * @param string[] $errors  Messages d'erreur à afficher
      * @param bool     $success true si le compte a été créé
      * @param string   $email   Email à pré-remplir dans le formulaire
+     * @param string   $login   Login à pré-remplir dans le formulaire
      */
-    private function showRegister(array $errors, bool $success, string $email): Response
+    private function showRegister(array $errors, bool $success, string $email, string $login): Response
     {
         return $this->view->render('register', [
             'errors'  => $errors,
             'success' => $success,
             'email'   => $email,
+            'login'   => $login,
             'title'   => 'Inscription',
-            'description' => 'Créez votre compte SAE S3 en quelques secondes.',
         ]);
     }
 
@@ -182,7 +187,6 @@ class AuthController
         return $this->view->render('verify', [
             'success' => $success,
             'title'   => 'Vérification du compte',
-            'noindex' => true,
         ]);
     }
 }
