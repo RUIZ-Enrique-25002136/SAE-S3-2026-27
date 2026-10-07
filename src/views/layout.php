@@ -16,8 +16,9 @@
     <?php if (!empty($noindex)): ?>
         <meta name="robots" content="noindex, nofollow">
     <?php endif; ?>
-    <meta name="description" content="<?=htmlspecialchars($description)?>">
-    <title><?= htmlspecialchars($title) ?> - SAE S3</title>
+    <?php if (!empty($description)): ?>
+        <meta name="description" content="<?= htmlspecialchars($description) ?>">
+    <?php endif; ?>    <title><?= htmlspecialchars($title) ?> - SAE S3</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="icon" type="image/x-icon" href="/assets/logo.png">
 </head>

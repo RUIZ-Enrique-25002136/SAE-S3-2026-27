@@ -117,6 +117,7 @@ class AccountController
             'errors'  => $errors,
             'success' => $success,
             'title'   => 'Mon compte',
+            'noindex' => true,
         ]);
     }
 }
