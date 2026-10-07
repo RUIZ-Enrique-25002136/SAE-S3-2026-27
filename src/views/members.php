@@ -16,7 +16,7 @@
         <table>
             <thead>
                 <tr>
-                    <th scope="col">Login</th>
+                    <th scope="col">Pseudo</th>
                     <th scope="col">Inscrit le</th>
                 </tr>
             </thead>
