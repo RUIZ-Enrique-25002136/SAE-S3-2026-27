@@ -6,14 +6,14 @@
  * @var int                $total
  */
 ?>
-<div class="card">
+<div class="card members-card">
     <h1>Membres</h1>
-    <p><?= $total ?> membre<?= $total > 1 ? 's' : '' ?> inscrit<?= $total > 1 ? 's' : '' ?>.</p>
+    <p class="members-count"><?= $total ?> membre<?= $total > 1 ? 's' : '' ?> inscrit<?= $total > 1 ? 's' : '' ?>.</p>
 
     <?php if ($members === []): ?>
-        <p>Aucun membre pour le moment.</p>
+        <p class="members-empty">Aucun membre pour le moment.</p>
     <?php else: ?>
-        <table>
+        <table class="members-table">
             <thead>
                 <tr>
                     <th scope="col">Pseudo</th>
@@ -23,8 +23,8 @@
             <tbody>
                 <?php foreach ($members as $member): ?>
                     <tr>
-                        <td><?= htmlspecialchars($member->login ?? 'Membre n°' . $member->id) ?></td>
-                        <td><?= $member->createdAt !== null ? htmlspecialchars(date('d/m/Y', (int) strtotime($member->createdAt))) : '' ?></td>
+                        <td class="member-login"><?= htmlspecialchars($member->login ?? 'Membre n°' . $member->id) ?></td>
+                        <td class="member-date"><?= $member->createdAt !== null ? htmlspecialchars(date('d/m/Y', (int) strtotime($member->createdAt))) : '' ?></td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
@@ -34,11 +34,11 @@
     <?php if ($pages > 1): ?>
         <nav aria-label="Pagination">
             <?php if ($page > 1): ?>
-                <a href="/members?page=<?= $page - 1 ?>" class="btn btn-secondary">« Précédent</a>
+                <a href="/members?page=<?= $page - 1 ?>" class="btn btn-secondary btn-sm">« Précédent</a>
             <?php endif; ?>
-            <span>Page <?= $page ?> sur <?= $pages ?></span>
+            <span class="pagination-info">Page <?= $page ?> sur <?= $pages ?></span>
             <?php if ($page < $pages): ?>
-                <a href="/members?page=<?= $page + 1 ?>" class="btn btn-secondary">Suivant »</a>
+                <a href="/members?page=<?= $page + 1 ?>" class="btn btn-secondary btn-sm">Suivant »</a>
             <?php endif; ?>
         </nav>
     <?php endif; ?>

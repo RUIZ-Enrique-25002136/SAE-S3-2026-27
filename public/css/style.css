@@ -257,7 +257,8 @@ main {
 }
 
 .mentions-section h2 {
-  font-size: 1.2rem;
+  font-si| Tâche | Outil | Prompt (résumé) | Solution proposée | Prise de décision |
+ze: 1.2rem;
   font-weight: 600;
   color: var(--primary);
   margin-bottom: 0.75rem;
@@ -287,6 +288,232 @@ main {
   border-radius: var(--radius-sm);
   font-size: 0.9em;
   font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+/* ========================================================
+   Plan du site
+   ======================================================== */
+.sitemap-card {
+  max-width: 640px;
+  margin: 1.5rem auto;
+}
+
+.sitemap-intro {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-top: -0.25rem;
+  margin-bottom: 1.75rem;
+}
+
+.sitemap-list {
+  list-style: none;
+  margin: 0 0 1.5rem;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background-color: var(--bg-surface);
+  overflow: hidden;
+}
+
+.sitemap-list li {
+  border-bottom: 1px solid var(--border);
+}
+
+.sitemap-list li:last-child {
+  border-bottom: none;
+}
+
+.sitemap-list a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.15rem;
+  color: var(--text-main);
+  text-decoration: none;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sitemap-list a:hover {
+  background-color: var(--bg-page);
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.sitemap-title {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.sitemap-url {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.sitemap-list a:hover .sitemap-url {
+  color: var(--primary);
+}
+
+/* ========================================================
+   Page Membres
+   ======================================================== */
+.members-card {
+  max-width: 640px;
+  margin: 1.5rem auto;
+}
+
+.members-count {
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-top: -0.25rem;
+  margin-bottom: 1.75rem;
+}
+
+.members-empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 2rem 1rem;
+}
+
+.members-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.members-table th {
+  padding: 0.75rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 2px solid var(--border);
+}
+
+.members-table th:last-child,
+.members-table td:last-child {
+  text-align: right;
+}
+
+.members-table td {
+  padding: 0.85rem 0.5rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95rem;
+  color: var(--text-body);
+}
+
+.members-table tbody tr:hover {
+  background-color: var(--bg-page);
+}
+
+.members-table .member-login {
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.members-table .member-date {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* Pagination */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.pagination-info {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+/* ========================================================
+   Mon compte
+   ======================================================== */
+.account-card {
+  max-width: 540px;
+  margin: 1.5rem auto;
+}
+
+.account-info {
+  background-color: var(--bg-page);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.75rem 1.25rem;
+  margin: 1.25rem 0 1.75rem;
+}
+
+.account-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 0;
+  font-size: 0.95rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.account-info-row:last-child {
+  border-bottom: none;
+}
+
+.account-info-label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.account-info-value {
+  color: var(--text-main);
+  font-weight: 600;
+}
+
+.account-section {
+  margin-top: 1.75rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.account-section h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin-bottom: 1rem;
+}
+
+.account-card form {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  padding: 0;
+  max-width: 100%;
+  margin: 0;
+}
+
+.account-card form p {
+  margin-bottom: 1rem;
+}
+
+.account-card form button {
+  width: 100%;
+}
+
+.account-danger h2 {
+  color: var(--danger-text);
+}
+
+.account-danger-text {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
 }
 
 
@@ -387,6 +614,36 @@ button[type="submit"]:active,
   text-decoration: none;
 }
 
+.btn-danger {
+  background-color: var(--danger-bg);
+  color: var(--danger-text);
+  border: 1px solid var(--danger-border);
+}
+
+.btn-danger:hover {
+  background-color: var(--danger-text);
+  color: #ffffff !important;
+  border-color: var(--danger-text);
+  text-decoration: none;
+}
+
+.btn-danger:active {
+  background-color: #991b1b;
+  transform: translateY(1px);
+}
+
+.btn-sm {
+  padding: 0.45rem 0.85rem;
+  font-size: 0.875rem;
+}
+
+.btn-disabled,
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 /* Liens secondaires et aide */
 .auth-helper {
   text-align: center;
@@ -482,6 +739,26 @@ main > ul {
   .card-actions .btn {
     width: 100%;
   }
+
+  /* Plan du site mobile */
+  .sitemap-card,
+  .members-card,
+  .account-card {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .sitemap-list a {
+    padding: 0.75rem 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+
+  .members-table th,
+  .members-table td {
+    padding: 0.75rem 0.35rem;
+    font-size: 0.875rem;
+  }
 }
 
 /* Mode sombre automatique basé sur les préférences système */
@@ -547,5 +824,16 @@ main > ul {
     background-color: #334155;
     color: #f8fafc;
     border-color: #475569;
+  }
+
+  .btn-danger {
+    background-color: var(--danger-bg);
+    border-color: var(--danger-border);
+    color: var(--danger-text);
+  }
+
+  .btn-danger:hover {
+    background-color: var(--danger-text);
+    color: #ffffff;
   }
 }
