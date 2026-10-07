@@ -184,7 +184,7 @@ a:hover {
 }
 
 /* Fallback pour nav sans classes */
-nav:not(.pagination):not(.sitemap-nav):not(.mentions-section) {
+nav {
   padding: 0.85rem 1.25rem;
   background-color: var(--bg-surface);
   border-bottom: 1px solid var(--border);
@@ -257,7 +257,8 @@ main {
 }
 
 .mentions-section h2 {
-  font-size: 1.2rem;
+  font-si| Tâche | Outil | Prompt (résumé) | Solution proposée | Prise de décision |
+ze: 1.2rem;
   font-weight: 600;
   color: var(--primary);
   margin-bottom: 0.75rem;
@@ -525,20 +526,6 @@ form {
   max-width: 420px;
   margin: 1.5rem auto;
   box-shadow: var(--shadow-md);
-}
-
-.card form,
-form.card-actions {
-  background-color: transparent;
-  border: none;
-  box-shadow: none;
-  padding: 0;
-  max-width: 100%;
-  margin: 0;
-}
-
-.card-actions button[type="submit"] {
-  width: auto;
 }
 
 form p {

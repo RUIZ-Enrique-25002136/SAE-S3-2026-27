@@ -1,5 +1,5 @@
 <?php
-/** @var array<string, array{title: string, action?: string, sitemap?: bool}> $pages */
+/** @var array<string, array{action: string, title: string, sitemap: bool}> $pages */
 ?>
 <div class="card sitemap-card">
     <h1>Plan du site</h1>

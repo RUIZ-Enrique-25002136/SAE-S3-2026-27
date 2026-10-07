@@ -32,7 +32,7 @@
     <?php endif; ?>
 
     <?php if ($pages > 1): ?>
-        <nav class="pagination" aria-label="Pagination">
+        <nav aria-label="Pagination">
             <?php if ($page > 1): ?>
                 <a href="/members?page=<?= $page - 1 ?>" class="btn btn-secondary btn-sm">« Précédent</a>
             <?php endif; ?>
