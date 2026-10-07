@@ -86,6 +86,8 @@ class AuthController
             'success' => $success,
             'email'   => $email,
             'title'   => 'Connexion',
+            'description' => 'Connectez-vous à votre compte SAE S3 pour accéder à votre espace.',
+
         ]);
     }
 
@@ -115,9 +117,6 @@ class AuthController
         }
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = 'Email invalide.';
-        }
-        if (!User::isValidLogin($login)) {
-            $errors[] = 'Le login doit contenir entre 3 et 30 caractères : lettres, chiffres, - ou _.';
         }
         if (strlen($password) < 8) {
             $errors[] = 'Le mot de passe doit contenir au moins 8 caractères.';

@@ -5,6 +5,7 @@
 * @var string     $title       Titre de la page
 * @var string     $currentPath Chemin de la page courante
 * @var array|null $user        Utilisateur connecté (id, email) ou null
+* @var string $description Description de la page
 */
 ?>
 <!DOCTYPE html>
@@ -12,6 +13,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php if (!empty($noindex)): ?>
+        <meta name="robots" content="noindex, nofollow">
+    <?php endif; ?>
+    <meta name="description" content="<?=htmlspecialchars($description)?>">
     <title><?= htmlspecialchars($title) ?> - SAE S3</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="icon" type="image/x-icon" href="/assets/logo.png">
@@ -27,8 +32,6 @@
                 <a href="/register" class="btn-register <?= $currentPath === '/register' ? 'active' : '' ?>">Inscription</a>
             <?php else: ?>
                 <span class="user-badge"><?= htmlspecialchars($user['email']) ?></span>
-                <a href="/members" class="nav-item <?= $currentPath === '/members' ? 'active' : '' ?>">Membres</a>
-                <a href="/account" class="nav-item <?= $currentPath === '/account' ? 'active' : '' ?>">Mon compte</a>
                 <a href="/logout" class="nav-item nav-logout">Déconnexion</a>
             <?php endif; ?>
         </nav>

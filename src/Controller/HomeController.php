@@ -12,12 +12,12 @@ class HomeController
     public function __construct(private View $view) {}
     public function index(Request $request): Response
     {
-        return $this->view->render('home', ['title' => 'Accueil']);
+        return $this->view->render('home', ['title' => 'Accueil', 'description' => 'SAE S3 : présentation du projet et accès à votre espace.',]);
     }
 
     public function legalNotice(Request $request): Response
     {
-        return $this->view->render('legal_notice', ['title' => 'Mentions légales']);
+        return $this->view->render('legal_notice', ['title' => 'Mentions légales','description' => 'Mentions légales et informations sur l\'éditeur du site SAE S3.',]);
     }
 
     public function sitemap(Request $request): Response
@@ -32,6 +32,7 @@ class HomeController
         return $this->view->render('sitemap', [
             'pages' => $pages,
             'title' => 'Plan du site',
+            'description' => 'Plan du site SAE S3 : retrouvez toutes les pages accessibles.',
         ]);
     }
 }
