@@ -43,6 +43,7 @@ class MemberController
             'pages'   => $pages,
             'total'   => $total,
             'title'   => 'Membres',
+            'noindex' => true,
         ]);
     }
 }

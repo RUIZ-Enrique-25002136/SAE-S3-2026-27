@@ -5,6 +5,7 @@
 * @var string     $title       Titre de la page
 * @var string     $currentPath Chemin de la page courante
 * @var array|null $user        Utilisateur connecté (id, email) ou null
+* @var string $description Description de la page
 */
 ?>
 <!DOCTYPE html>
@@ -12,6 +13,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <?php if (!empty($noindex)): ?>
+        <meta name="robots" content="noindex, nofollow">
+    <?php endif; ?>
+    <?php if (!empty($description)): ?>
+        <meta name="description" content="<?= htmlspecialchars($description) ?>">
+    <?php endif; ?>
     <title><?= htmlspecialchars($title) ?> - SAE S3</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="icon" type="image/x-icon" href="/assets/logo.png">

@@ -56,6 +56,7 @@ class PasswordController
             'errors'  => $errors,
             'success' => $success,
             'title'   => 'Mot de passe oublié',
+            'noindex' => true,
         ]);
     }
 
@@ -103,6 +104,7 @@ class PasswordController
             'isTokenValid' => $isTokenValid,
             'token'        => $token,
             'title'        => 'Nouveau mot de passe',
+            'noindex'      => true,
         ]);
     }
 }
