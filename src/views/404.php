@@ -1,6 +1,17 @@
+<?php
+/**
+ * @var string $title
+ * @var array{id: int, email: string}|null $user
+ * @var string $currentPath
+ * @var string|null $path
+ */
 
-<div class="card">
-    <h1>404 - Page non trouvée</h1>
-    <p>La page <code><?= htmlspecialchars($path ?? '') ?></code> n'existe pas.</p>
-    <a href="/" class="btn btn-primary">Retour à l'accueil</a>
-</div>
+use App\View\Layout;
+use App\View\Link;
+use App\View\Paragraph;
+use App\View\Strong;
+
+return new Layout($title, $user, [
+        new Paragraph(['La page ', new Strong($path ?? ''), " n'existe pas"]),
+        new Link("Retour a l'acceuil", '/', 'btn btn-primary'),
+], $currentPath);
